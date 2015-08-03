@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="android:Theme.DeviceDefault.NoActionBar">
         <item name="colorPrimary">#3C515C</item>
         <item name="android:title">""</item>
         <item name="colorPrimaryDark">#142E3C</item>
