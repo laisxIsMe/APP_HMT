@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
@@ -581,4 +582,11 @@ public class AbSlidingPlayView extends LinearLayout {
 		mViewPager.setCurrentItem(i, true);
 	}
 
+	@Override
+	protected void onRestoreInstanceState(Parcelable state) {
+		try {
+			super.onRestoreInstanceState(state);
+		}catch (Exception e) {}
+		state=null;
+	}
 }
