@@ -32,3 +32,6 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:library:1.2.3@aar'
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.2.3@aar'
 }
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

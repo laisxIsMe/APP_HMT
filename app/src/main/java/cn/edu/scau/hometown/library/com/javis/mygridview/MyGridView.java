@@ -18,12 +18,12 @@ public class MyGridView extends GridView {
 		super(context, attrs, defStyle);
 	}
 
-	@Override
+/*	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
 		int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,MeasureSpec.AT_MOST);
 
 		super.onMeasure(widthMeasureSpec, expandSpec);
-	}
+	}*/
 
 }

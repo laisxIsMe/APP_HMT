@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ import cn.edu.scau.hometown.library.com.javis.abslidingpagerview.AbOnItemClickLi
 import cn.edu.scau.hometown.library.com.javis.abslidingpagerview.AbSlidingPlayView;
 import cn.edu.scau.hometown.library.com.javis.mygridview.Adapter_GridView;
 import cn.edu.scau.hometown.library.com.javis.mygridview.MyGridView;
+import cn.edu.scau.hometown.library.com.javis.mylistview.Adapter_ListView_hmtF;
+import cn.edu.scau.hometown.library.com.javis.mylistview.ItemBean;
 
 
 /**
@@ -29,18 +32,28 @@ public class HmtForumFragment extends Fragment {
     private View view;
 
     private AbSlidingPlayView vp_ab;
-    /**´æ´¢Ê×Ò³ÂÖ²¥µÄ½çÃæ*/
+    /**å­˜å‚¨é¦–é¡µè½®æ’­çš„ç•Œé¢*/
     private ArrayList<View> allListView;
-    /**Ê×Ò³ÂÖ²¥µÄ½çÃæµÄ×ÊÔ´*/
-    //TODO ÏàÆ¬µÄÔØÈë
+    //TODO ç›¸ç‰‡çš„è½½å…¥
     private int[] resId = { R.drawable.menu_viewpager_1, R.drawable.menu_viewpager_2, R.drawable.menu_viewpager_3, R.drawable.menu_viewpager_4, R.drawable.menu_viewpager_5 };
 
 
-    /**·ÖÀàµÄ¾Å¹¬¸ñ*/
+    /**åˆ†ç±»çš„ä¹å®«æ ¼*/
     private MyGridView gridView_classify;
-    /**·ÖÀà¾Å¹¬¸ñµÄ×ÊÔ´ÎÄ¼ş*/
-    private int[] pic_path_classify = { R.drawable.menu_guide_1, R.drawable.menu_guide_2, R.drawable.menu_guide_3, R.drawable.menu_guide_4, R.drawable.menu_guide_5, R.drawable.menu_guide_6, R.drawable.menu_guide_7, R.drawable.menu_guide_8 };
+    //TODO
+    private String[] themes = {"æµ·æ´‹é¦†","theme","theme","theme","theme","theme","theme","theme","theme","æ›´å¤š"};
+    private int[] pic_path_classify = { R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8, R.drawable.menu_guide_8 };
     private Adapter_GridView adapter_GridView_classify;
+
+    /**çƒ­é—¨å¸–å­*/
+    private ListView lv;
+    private ItemBean[] itemBeans=new ItemBean[]{
+            new ItemBean(),
+            new ItemBean(),
+            new ItemBean(),
+            new ItemBean(),
+            new ItemBean("çº¢æ»¡å ‚","2015-11-12","æ„Ÿæƒ…å®£æ³„","9","é‚£å¤©çš„å¤œæ™šå•¦å•¦å•¦å•¦å•¦å•¦å•¦å•¦å•¦ï¼Œé¡¶é¡¶é¡¶é¡¶é¡¶å¤§ï¼Œé¡¶é¡¶é¡¶é¡¶é¡¶å¤§å¿«å¿«å¿«å¿«å¿«å¿«ï¼")
+    };//èµ„æº
 
 
     @Nullable
@@ -49,16 +62,12 @@ public class HmtForumFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_hmt_forum,container,false);
         init_abSlidingPagerView();
         init_gridView();
+        init_listView();
         return  view;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     private void init_abSlidingPagerView(){
-        vp_ab = (AbSlidingPlayView)view.findViewById(R.id.vp_ab);
+        vp_ab = (AbSlidingPlayView)view.findViewById(R.id.vp_ab_F);
 
 
         if (allListView != null) {
@@ -68,7 +77,7 @@ public class HmtForumFragment extends Fragment {
         allListView = new ArrayList<View>();
 
         for (int i = 0; i < resId.length; i++) {
-            //µ¼ÈëViewPagerµÄ²¼¾Ö,Ç°ÈıĞĞÊÇ°ÑÍ¼Æ¬·â×°³ÉÒ»¸öImageView
+            //å¯¼å…¥ViewPagerçš„å¸ƒå±€,å‰ä¸‰è¡Œæ˜¯æŠŠå›¾ç‰‡å°è£…æˆä¸€ä¸ªImageView
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.pic_item_for_hmtfragment, null);
             ImageView imageView = (ImageView) view.findViewById(R.id.pic_item_for_hmtfragment);
             imageView.setImageResource(resId[i]);
@@ -77,14 +86,14 @@ public class HmtForumFragment extends Fragment {
 
 
         vp_ab.addViews(allListView);
-        //¿ªÊ¼ÂÖ²¥
+        //å¼€å§‹è½®æ’­
         vp_ab.makesurePosition();
         vp_ab.creatIndex();
         vp_ab.startPlay();
         vp_ab.setOnItemClickListener(new AbOnItemClickListener() {
             @Override
             public void onClick(int position) {
-                //Ìø×ªµ½ÏêÇé½çÃæ
+                //è·³è½¬åˆ°è¯¦æƒ…ç•Œé¢
 //				Intent intent = new Intent(getActivity(), BabyActivity.class);
 //				startActivity(intent);
                 vp_ab.stopPlay();
@@ -96,21 +105,36 @@ public class HmtForumFragment extends Fragment {
     }
 
     private void init_gridView(){
-        gridView_classify = (MyGridView) view.findViewById(R.id.my_gridview);
+        gridView_classify = (MyGridView) view.findViewById(R.id.gv_hmt_F);
         gridView_classify.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        adapter_GridView_classify = new Adapter_GridView(getActivity(), pic_path_classify);
+        adapter_GridView_classify = new Adapter_GridView(getActivity(), pic_path_classify,themes);
         gridView_classify.setAdapter(adapter_GridView_classify);
 
         gridView_classify.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                //ÌôÕ½µ½±¦±´ËÑË÷½çÃæ
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                //æŒ‘æˆ˜åˆ°å®è´æœç´¢ç•Œé¢
 //				Intent intent = new Intent(getActivity(), WareActivity.class);
 //				startActivity(intent);
-                Toast.makeText(getActivity(), "gridItem=" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "gridItem="+position , Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    private void init_listView(){
+        lv = (ListView)view.findViewById(R.id.lv_hmt_F);
+        Adapter_ListView_hmtF adapter_listView_hmtF = new Adapter_ListView_hmtF(getActivity(), itemBeans);
+        lv.setAdapter(adapter_listView_hmtF);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //æŒ‘æˆ˜åˆ°å®è´æœç´¢ç•Œé¢
+//				Intent intent = new Intent(getActivity(), WareActivity.class);
+//				startActivity(intent);
+                Toast.makeText(getActivity(),"id="+position,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

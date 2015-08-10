@@ -11,9 +11,9 @@ import android.widget.ScrollView;
 
 /**
  * 
- * Ãû³Æ£ºAbInnerViewPager.java 
- * ÃèÊö£ºÕâ¸öViewPager½â¾öÁËÍâ²¿ÊÇ¿É¹ö¶¯View£¨List»òÕßscrollView£©
- * ÓëÄÚ²¿¿É»¬¶¯ViewµÄÊÂ¼ş³åÍ»ÎÊÌâ
+ * åç§°ï¼šAbInnerViewPager.java 
+ * æè¿°ï¼šè¿™ä¸ªViewPagerè§£å†³äº†å¤–éƒ¨æ˜¯å¯æ»šåŠ¨Viewï¼ˆListæˆ–è€…scrollViewï¼‰
+ * ä¸å†…éƒ¨å¯æ»‘åŠ¨Viewçš„äº‹ä»¶å†²çªé—®é¢˜
  */
 @SuppressWarnings("deprecation")
 public class AbInnerViewPager extends ViewPager {
@@ -27,7 +27,7 @@ public class AbInnerViewPager extends ViewPager {
 	private GestureDetector mGestureDetector;
 	
 	/**
-	 * ³õÊ¼»¯Õâ¸öÄÚ²¿µÄViewPager.
+	 * åˆå§‹åŒ–è¿™ä¸ªå†…éƒ¨çš„ViewPager.
 	 *
 	 * @param context the context
 	 */
@@ -39,7 +39,7 @@ public class AbInnerViewPager extends ViewPager {
 	}
 
 	/**
-	 * ³õÊ¼»¯Õâ¸öÄÚ²¿µÄViewPager.
+	 * åˆå§‹åŒ–è¿™ä¸ªå†…éƒ¨çš„ViewPager.
 	 *
 	 * @param context the context
 	 * @param attrs the attrs
@@ -51,7 +51,7 @@ public class AbInnerViewPager extends ViewPager {
 	}
 	
 	/**
-	 * ÃèÊö£ºÀ¹½ØÊÂ¼ş.
+	 * æè¿°ï¼šæ‹¦æˆªäº‹ä»¶.
 	 *
 	 * @param ev the ev
 	 * @return true, if successful
@@ -63,9 +63,9 @@ public class AbInnerViewPager extends ViewPager {
 	}
 
 	/**
-	 * ÉèÖÃ¸¸¼¶µÄView.
+	 * è®¾ç½®çˆ¶çº§çš„View.
 	 *
-	 * @param flag ¸¸ÊÇ·ñ¹ö¶¯¿ª¹Ø
+	 * @param flag çˆ¶æ˜¯å¦æ»šåŠ¨å¼€å…³
 	 */
 	private void setParentScrollAble(boolean flag) {
 		if(parentScrollView!=null){
@@ -79,7 +79,7 @@ public class AbInnerViewPager extends ViewPager {
 	}
 
 	/**
-	 * Èç¹ûÍâ²ãÓĞScrollViewĞèÒªÉèÖÃ.
+	 * å¦‚æœå¤–å±‚æœ‰ScrollViewéœ€è¦è®¾ç½®.
 	 *
 	 * @param parentScrollView the new parent scroll view
 	 */
@@ -88,7 +88,7 @@ public class AbInnerViewPager extends ViewPager {
 	}
 	
 	/**
-	 * Èç¹ûÍâ²ãÓĞListViewĞèÒªÉèÖÃ.
+	 * å¦‚æœå¤–å±‚æœ‰ListViewéœ€è¦è®¾ç½®.
 	 *
 	 * @param parentListView the new parent scroll view
 	 */
@@ -104,7 +104,7 @@ public class AbInnerViewPager extends ViewPager {
 				float distanceX, float distanceY) {
 			
 			if (Math.abs(distanceX) >= Math.abs(distanceY)) {
-				//¸¸Ç×²»»¬¶¯
+				//çˆ¶äº²ä¸æ»‘åŠ¨
 				setParentScrollAble(false);
 				return true;
 			}else{

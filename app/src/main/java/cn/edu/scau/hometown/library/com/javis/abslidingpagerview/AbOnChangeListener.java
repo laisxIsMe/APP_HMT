@@ -1,6 +1,4 @@
 package cn.edu.scau.hometown.library.com.javis.abslidingpagerview;
-
-
 /**
  * The listener interface for receiving abOnChange events.
  * The class that is interested in processing a abOnChange

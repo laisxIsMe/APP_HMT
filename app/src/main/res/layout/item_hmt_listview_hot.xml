@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/title_hot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="我要去玩了啊啊啊啊啊啊啊"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textColorHint="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/time_hot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:hint="2015-07-01 15:57"
+            android:padding="1dp"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/owner_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:background="#FF6100"
+                android:hint="感情天地"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/comment_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:background="#0000F7"
+                android:hint="回复 9"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_hot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="2dp"
+        android:textColor="#808A87"
+        android:hint="拉斯克奖饭店里卡地方看到，饭，地方拿电脑房，拿到开发那块地方看到放开那，"
+        android:maxLines="3" />
+
+</LinearLayout>

@@ -1,13 +1,13 @@
 package cn.edu.scau.hometown.library.com.javis.abslidingpagerview;
 
 /**
- * ÃèÊö£ºÌõÄ¿µã»÷½Ó¿Ú.
+ * æè¿°ï¼šæ¡ç›®ç‚¹å‡»æ¥å£.
  */
 public interface AbOnItemClickListener {
 	
 	/**
-	 * ÃèÊö£ºµã»÷ÊÂ¼ş.
-	 * @param position Ë÷Òı
+	 * æè¿°ï¼šç‚¹å‡»äº‹ä»¶.
+	 * @param position ç´¢å¼•
 	 */
     public void onClick(int position); 
 }

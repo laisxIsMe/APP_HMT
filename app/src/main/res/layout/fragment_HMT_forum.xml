@@ -7,19 +7,22 @@
 
 
     <cn.edu.scau.hometown.library.com.javis.abslidingpagerview.AbSlidingPlayView
-        android:id="@+id/vp_ab"
+        android:id="@+id/vp_ab_F"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginBottom="10dp"
         android:background="#00000000" />
 
     <cn.edu.scau.hometown.library.com.javis.mygridview.MyGridView
-        android:id="@+id/my_gridview"
+        android:id="@+id/gv_hmt_F"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numColumns="5" />
+
+    <ListView
+        android:id="@+id/lv_hmt_F"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:horizontalSpacing="5dp"
-        android:numColumns="4"
-        android:verticalSpacing="5dp"/>
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>

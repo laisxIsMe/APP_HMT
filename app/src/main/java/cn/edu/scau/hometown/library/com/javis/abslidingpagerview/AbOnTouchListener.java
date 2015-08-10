@@ -1,17 +1,16 @@
 package cn.edu.scau.hometown.library.com.javis.abslidingpagerview;
-
 import android.view.MotionEvent;
 
 /**
  * 
- * 触摸屏幕接口
+ * 瑙︽懜灞忓箷鎺ュ彛
  *
  */
 public interface AbOnTouchListener {
 	/**
-	 * 描述：Touch事件.
+	 * 鎻忚堪锛歍ouch浜嬩欢.
 	 *
-	 * @param event 触摸手势
+	 * @param event 瑙︽懜鎵嬪娍
 	 */
     public void onTouch(MotionEvent event); 
 }
