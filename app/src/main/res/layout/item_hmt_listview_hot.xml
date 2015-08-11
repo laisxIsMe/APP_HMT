@@ -71,6 +71,7 @@
         android:layout_marginTop="2dp"
         android:textColor="#808A87"
         android:hint="拉斯克奖饭店里卡地方看到，饭，地方拿电脑房，拿到开发那块地方看到放开那，"
-        android:maxLines="3" />
+        android:ellipsize="end"
+        android:lines="2" />
 
 </LinearLayout>

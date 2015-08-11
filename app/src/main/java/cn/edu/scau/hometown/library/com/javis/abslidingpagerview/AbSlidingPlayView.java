@@ -175,6 +175,9 @@ public class AbSlidingPlayView extends LinearLayout {
 		displayImage =getBitmapFormSrc("play_display.png");
 		hideImage =getBitmapFormSrc("play_hide.png");
 
+		displayImage =BitmapFactory.decodeResource(this.getResources(), R.drawable.play_display);
+		hideImage =BitmapFactory.decodeResource(this.getResources(), R.drawable.play_hide);
+
 		mListViews = new ArrayList<View>();
 		mAbViewPagerAdapter = new AbViewPagerAdapter(context, mListViews);
 		mViewPager.setAdapter(mAbViewPagerAdapter);
@@ -207,7 +210,7 @@ public class AbSlidingPlayView extends LinearLayout {
 	 */
 	private Bitmap getBitmapFormSrc(String name){
 		Bitmap bitmap=null;
-		
+
 		try {
 			InputStream is=getResources().getAssets().open(name);
 			bitmap=BitmapFactory.decodeStream(is);
@@ -588,4 +591,5 @@ public class AbSlidingPlayView extends LinearLayout {
 		}catch (Exception e) {}
 		state=null;
 	}
+
 }

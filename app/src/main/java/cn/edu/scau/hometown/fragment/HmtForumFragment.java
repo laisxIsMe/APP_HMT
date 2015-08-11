@@ -23,6 +23,7 @@ import cn.edu.scau.hometown.library.com.javis.mygridview.Adapter_GridView;
 import cn.edu.scau.hometown.library.com.javis.mygridview.MyGridView;
 import cn.edu.scau.hometown.library.com.javis.mylistview.Adapter_ListView_hmtF;
 import cn.edu.scau.hometown.library.com.javis.mylistview.ItemBean;
+import cn.edu.scau.hometown.tools.ListViewMeasureUtil;
 
 
 /**
@@ -88,7 +89,6 @@ public class HmtForumFragment extends Fragment {
         vp_ab.addViews(allListView);
         //开始轮播
         vp_ab.makesurePosition();
-        vp_ab.creatIndex();
         vp_ab.startPlay();
         vp_ab.setOnItemClickListener(new AbOnItemClickListener() {
             @Override
@@ -119,6 +119,8 @@ public class HmtForumFragment extends Fragment {
                 Toast.makeText(getActivity(), "gridItem="+position , Toast.LENGTH_LONG).show();
             }
         });
+
+
     }
 
     private void init_listView(){
@@ -132,9 +134,12 @@ public class HmtForumFragment extends Fragment {
                 //挑战到宝贝搜索界面
 //				Intent intent = new Intent(getActivity(), WareActivity.class);
 //				startActivity(intent);
-                Toast.makeText(getActivity(),"id="+position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "id=" + position, Toast.LENGTH_SHORT).show();
             }
         });
+
+        ListViewMeasureUtil.setListViewHeightBasedOnChildren(lv);
+
     }
 
 }

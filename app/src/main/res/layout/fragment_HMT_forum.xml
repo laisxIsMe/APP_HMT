@@ -5,24 +5,44 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-
-    <cn.edu.scau.hometown.library.com.javis.abslidingpagerview.AbSlidingPlayView
-        android:id="@+id/vp_ab_F"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginBottom="10dp"
-        android:background="#00000000" />
-
-    <cn.edu.scau.hometown.library.com.javis.mygridview.MyGridView
-        android:id="@+id/gv_hmt_F"
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numColumns="5" />
+        android:layout_height="wrap_content">
 
-    <ListView
-        android:id="@+id/lv_hmt_F"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <cn.edu.scau.hometown.library.com.javis.abslidingpagerview.AbSlidingPlayView
+                android:id="@+id/vp_ab_F"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginBottom="10dp"
+                android:background="#00000000" />
+
+            <cn.edu.scau.hometown.library.com.javis.mygridview.MyGridView
+                android:id="@+id/gv_hmt_F"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numColumns="5" />
+
+            <ListView
+                android:id="@+id/lv_hmt_F"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#ffcec6b7"
+                android:dividerHeight="9dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:background="#ffcec6b7"
+                android:hint="更多帖子"
+                android:textColorHint="#000000"/>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
