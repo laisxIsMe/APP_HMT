@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new HmtForumFragment());
         fragments.add(new PartitionFragment());
         fragments.add(new FocusFragment());
-        fragments.add(new PartitionFragment());
 
         InitToolBar();
         InitTabLayout();

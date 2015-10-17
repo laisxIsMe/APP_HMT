@@ -45,20 +45,20 @@ import fab.FloatingActionButton;
 
 /**
  * Created by acer on 2015/7/24.
+ *
  * @author simple
  */
 public class SecondaryMarketFragment extends Fragment {
-    private TextView tv_classify,tv_track,tv_collection;
+    private TextView tv_classify, tv_track, tv_collection;
     private Dialog dialog;
     private SwipeRefreshLayout lo_swiper;
     private ArrayList<Integer> icon;
     private ArrayList<String> iconName;
     private View layout;
-    private View contentview ;
+    private View contentview;
     private List<UsedGoodsBaseData> datas = new ArrayList<>();
     private View view;
     private RecyclerView listView;
-    //Volley网络请求会用到的工具
     private RequestQueue mRequestQueue;
     private InitUsedMarketListAdapter adapter;
     private FloatingActionButton floatingActionButton;
@@ -75,7 +75,7 @@ public class SecondaryMarketFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_secondary_market,container,false);
+        view = inflater.inflate(R.layout.fragment_secondary_market, container, false);
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -88,8 +88,7 @@ public class SecondaryMarketFragment extends Fragment {
         initListView();
         initDialog();
         contentview = view.findViewById(R.id.nu);
-
-        floatingActionButton = (FloatingActionButton)view.findViewById(R.id.fab);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab);
         floatingActionButton.attachToRecyclerView(listView);
         floatingActionButton.setFocusable(true);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +103,7 @@ public class SecondaryMarketFragment extends Fragment {
             }
         });
 
-        return  view;
+        return view;
     }
 
     @SuppressLint("InflateParams")
@@ -112,12 +111,10 @@ public class SecondaryMarketFragment extends Fragment {
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layout = inflater.inflate(R.layout.task_detail_popupwindow, null);
-        tv_classify = (TextView)layout.findViewById(R.id.tv_classify);
+        tv_classify = (TextView) layout.findViewById(R.id.tv_classify);
         tv_classify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //实例化SelectPicPopupWindow
-                //显示窗口
                 pwMyPopWindow.dismiss();
                 dialog.show();
 
@@ -130,7 +127,7 @@ public class SecondaryMarketFragment extends Fragment {
                 pwMyPopWindow.dismiss();
             }
         });
-        tv_track = (TextView)layout.findViewById(R.id.tv_track);
+        tv_track = (TextView) layout.findViewById(R.id.tv_track);
         tv_track.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +151,7 @@ public class SecondaryMarketFragment extends Fragment {
         pwMyPopWindow.setOutsideTouchable(true);// 触摸popupwindow外部，popupwindow消失。这个要求你的popupwindow要有背景图片才可以成功，如上
     }
 
-    private void  initListView(){
+    private void initListView() {
 
         listView = (RecyclerView) view.findViewById(R.id.lv_used_maket);
         listView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -167,7 +164,7 @@ public class SecondaryMarketFragment extends Fragment {
 
                         Intent intent = new Intent(getActivity(), DetialUsedMarketActivity.class);
                         Bundle b = new Bundle();
-                        b.putSerializable("GoodInfo",data);
+                        b.putSerializable("GoodInfo", data);
                         intent.putExtras(b);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.keep);
@@ -187,16 +184,17 @@ public class SecondaryMarketFragment extends Fragment {
 
             }
         }));
-        adapter = new InitUsedMarketListAdapter( datas, new UsedMarketMianImageListener() {
+        adapter = new InitUsedMarketListAdapter(datas, new UsedMarketMianImageListener() {
             @Override
-            public void setImage(ImageView image,String url) {
-                if (!url.equals("")&&url!=null){
-                    mRequestQueue.add(UsedMarketHttpUtil.getUMKMainImage(url,300,300, Bitmap.Config.RGB_565,image));
+            public void setImage(ImageView image, String url) {
+                if (!url.equals("") && url != null) {
+                    mRequestQueue.add(UsedMarketHttpUtil.getUMKMainImage(url, 300, 300, Bitmap.Config.RGB_565, image));
                 }
             }
         });
         listView.setAdapter(adapter);
     }
+
     private void initClassifyDialogData() {
         icon = new ArrayList<>();
         icon.add(R.drawable.user_group_icon);
@@ -219,12 +217,12 @@ public class SecondaryMarketFragment extends Fragment {
 
     }
 
-    private void initMainData(){
+    private void initMainData() {
         mRequestQueue.add(UsedMarketHttpUtil.getMainData(new UsedMarketBaseSearchListener() {
             @Override
             public void success(List<UsedGoodsBaseData> datas) {
                 SecondaryMarketFragment.this.datas.clear();
-                for (UsedGoodsBaseData data : datas){
+                for (UsedGoodsBaseData data : datas) {
                     SecondaryMarketFragment.this.datas.add(data);
                 }
                 adapter.notifyDataSetChanged();
@@ -246,7 +244,7 @@ public class SecondaryMarketFragment extends Fragment {
     private void initDialog() {
         View view = getActivity().getLayoutInflater().inflate(R.layout.classify_dialog, null);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rcv_classify);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         recyclerView.setAdapter(new RcvDialogAdater());
 
 
@@ -264,8 +262,6 @@ public class SecondaryMarketFragment extends Fragment {
         dialog.onWindowAttributesChanged(wl);
         dialog.setCanceledOnTouchOutside(true);
     }
-
-
 
 
     private void initLayoutSwiper() {
@@ -305,7 +301,7 @@ public class SecondaryMarketFragment extends Fragment {
                 public void onClick(View view) {
                     dialog.dismiss();
                     lo_swiper.setRefreshing(true);
-                    mRequestQueue.add(UsedMarketHttpUtil.getClassifyData(position+8 , new UsedMarketBaseSearchListener() {
+                    mRequestQueue.add(UsedMarketHttpUtil.getClassifyData(position + 8, new UsedMarketBaseSearchListener() {
                         @Override
                         public void success(List<UsedGoodsBaseData> datas) {
                             SecondaryMarketFragment.this.datas.clear();
@@ -341,9 +337,10 @@ public class SecondaryMarketFragment extends Fragment {
             TextView partition_tv;
             ImageView partition_image;
             View view;
+
             public MyViewHolder(View view) {
                 super(view);
-                this.view= view;
+                this.view = view;
                 partition_tv = (TextView) view.findViewById(R.id.partition_text);
                 partition_image = (ImageView) view.findViewById(R.id.partition_image);
             }

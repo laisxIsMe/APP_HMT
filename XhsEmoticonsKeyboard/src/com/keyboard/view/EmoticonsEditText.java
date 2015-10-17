@@ -54,9 +54,6 @@ public class EmoticonsEditText extends EditText {
         }
     }
 
-    public void setEmoticonImageSpanSize(int width, int height) {
-
-    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -66,29 +63,11 @@ public class EmoticonsEditText extends EditText {
         }
     }
 
-    public static String emojiText(String text){
-        String returnTextString = text;
-        //Pattern to match
-//        Pattern pattern = Pattern.compile("\\\\[[^\\\\]]+\\\\]", Pattern.CASE_INSENSITIVE);
-        Pattern pattern = Pattern . compile (
-                "[\\ud83c\\udc00-\\ud83c\\udfff]|[\\ud83d\\udc00-\\ud83d\\udfff]|[\\u2600-\\u27ff]" ,
-                Pattern . UNICODE_CASE | Pattern . CASE_INSENSITIVE ) ;
-        Matcher matcher = pattern.matcher(text);
-        Log.i("","");
-        while (matcher.find()) {
-            String found = matcher.group();
-            Log.i("","");
-//            if(EmojiMap.get(found)==null)continue;
-//            returnTextString = returnTextString.replace(found, EmojiMap.get(found));
-        }
-        //Returning text
-        return returnTextString;
-    }
+
 
     @Override
     protected void onTextChanged(CharSequence arg0, int start, int lengthBefore, int after) {
         super.onTextChanged(arg0, start, lengthBefore, after);
-      //  emojiText(arg0.toString());
         if (after > 0) {
             int end = start + after;
             String keyStr = arg0.toString().substring(start, end);
@@ -115,8 +94,8 @@ public class EmoticonsEditText extends EditText {
                             itemWidth = mItemWidth;
                         }
 
-                        drawable.setBounds(0, 0, itemHeight, itemWidth);
-                        VerticalImageSpan imageSpan = new VerticalImageSpan(drawable);
+                        drawable.setBounds(0, 0, 2*itemHeight, 2*itemWidth);
+                      ImageSpan imageSpan = new ImageSpan(drawable);
                         getText().setSpan(imageSpan, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                         isEmoticonMatcher = true;
                     }

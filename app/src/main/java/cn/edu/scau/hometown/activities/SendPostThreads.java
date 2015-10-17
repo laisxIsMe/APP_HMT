@@ -17,9 +17,6 @@ import com.keyboard.view.EmoticonsEditText;
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.tools.EmoticonsUtils;
 
-/**
- * Created by Administrator on 2015/10/10 0010.
- */
 public class SendPostThreads extends AppCompatActivity {
     private Toolbar toolbar;
     private String author;
@@ -58,6 +55,7 @@ public class SendPostThreads extends AppCompatActivity {
     public void initKeyBoardPopWindow() {
         mKeyBoardPopWindow = new EmoticonsKeyBoardPopWindow(this);
         mKeyBoardPopWindow.setBuilder(EmoticonsUtils.getSimpleBuilder(this));
+        mKeyBoardPopWindow.setEditText(et_content);
 
     }
 
@@ -77,9 +75,7 @@ public class SendPostThreads extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //当点击不同的menu item 是执行不同的操作
-        switch (id) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 break;

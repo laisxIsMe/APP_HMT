@@ -273,7 +273,7 @@ public class SearchCoursesActivity extends SwipeBackActivity implements SearchMe
                         AllComment mAllComment = gson.fromJson(json, type);
 
                         Intent intent = new Intent(SearchCoursesActivity.this,
-                                ShowCommentsActivity.class);
+                                NewShowCommentsActivity.class);
                         intent.putExtra("评论", mAllComment);
                         startActivity(intent);
                         overridePendingTransition(R.anim.in_from_right, R.anim.keep);

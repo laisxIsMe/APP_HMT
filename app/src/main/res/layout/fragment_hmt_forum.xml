@@ -30,7 +30,6 @@
             android:id="@+id/lv_hmt_forum"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+           />
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

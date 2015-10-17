@@ -57,7 +57,7 @@ public class PushCommendAcitivity extends Activity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.textview_only1);
+        setContentView(R.layout.textview_only);
 
         findView();
         setListener();

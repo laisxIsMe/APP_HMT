@@ -62,7 +62,6 @@ public class HmtForumFragment extends Fragment {
     //论坛图片信息类
     private ImagesGuideToThreads imagesGuideToThreads;
     private String tid;
-
     private BGABanner  banner;
 
     @Override
