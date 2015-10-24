@@ -1,8 +1,9 @@
 package cn.edu.scau.hometown.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,11 @@ import cn.edu.scau.hometown.R;
 /**
  * Created by laisixiang on 2015/10/11.
  */
-public class PushCommendAcitivity extends Activity implements View.OnClickListener{
+public class PushCommendAcitivity extends AppCompatActivity implements View.OnClickListener{
+
+    private final int REFLUSH_SPINNER=1;
+
+    private Toolbar toolbar;
 
     private EditText et_check;
     private EditText et_homeword;
@@ -37,6 +42,7 @@ public class PushCommendAcitivity extends Activity implements View.OnClickListen
     private CheckBox cb_named;
     private Button bt_push;
 
+    private String string_id;
     private String string_check;
     private String string_homeword;
     private String string_exam;
@@ -59,9 +65,20 @@ public class PushCommendAcitivity extends Activity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.textview_only);
 
+        string_id = (String) getIntent().getSerializableExtra("课程");
+
+        initToolBar();
         findView();
         setListener();
         initSpinner();
+    }
+
+    private void initToolBar() {
+        toolbar = (Toolbar) findViewById(R.id.partition_toolbar);
+        toolbar.setTitle("写评论");
+        toolbar.setBackgroundColor(getResources().getColor(R.color.tab_blue));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void findView(){
@@ -88,6 +105,7 @@ public class PushCommendAcitivity extends Activity implements View.OnClickListen
     }
 
     public void push_bt(){
+
         string_check = et_check.getText().toString();
         string_homeword = et_homeword.getText().toString();
         string_score = et_scroe.getText().toString();
