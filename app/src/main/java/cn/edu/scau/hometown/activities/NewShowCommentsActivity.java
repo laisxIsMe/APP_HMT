@@ -1,6 +1,5 @@
 package cn.edu.scau.hometown.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 
@@ -65,7 +63,6 @@ public class NewShowCommentsActivity extends AppCompatActivity {
         mCardView.findViewById(R.id.button_writecommend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "writer come up", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(NewShowCommentsActivity.this, PushCommendAcitivity.class);
                 intent.putExtra("课程", mAllComments.getCourse().getID());
                 startActivity(intent);

@@ -2,64 +2,105 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/support">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/partition_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    </android.support.design.widget.AppBarLayout>
+
+    <!--android:layout_height="?attr/actionBarSize"-->
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/support">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/et_check"
-                style="@style/bg_mEditView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="14dp"
-                android:hint="点名情况" />
+                android:orientation="vertical">
+                <TextView
+                    style="@style/mTextView"
+                    android:text="点名情况"/>
+                <EditText
+                    android:id="@+id/et_check"
+                    style="@style/bg_mEditView"
+                    android:hint="点名情况" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_homeword"
-                style="@style/bg_mEditView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="14dp"
-                android:hint="平时作业" />
+                android:orientation="vertical">
+                <TextView
+                    style="@style/mTextView"
+                    android:text="作业情况"/>
+                <EditText
+                    android:id="@+id/et_homeword"
+                    style="@style/bg_mEditView"
+                    android:hint="作业情况" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_exam"
-                style="@style/bg_mEditView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="14dp"
-                android:hint="考试形式" />
+                android:orientation="vertical">
+                <TextView
+                    style="@style/mTextView"
+                    android:text="考试形式"/>
+                <EditText
+                    android:id="@+id/et_exam"
+                    style="@style/bg_mEditView"
+                    android:hint="考试形式" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_score"
-                style="@style/bg_mEditView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="14dp"
-                android:inputType="number"
-                android:hint="期末成绩" />
+                android:orientation="vertical">
+                <TextView
+                    style="@style/mTextView"
+                    android:text="期末成绩"/>
+                <EditText
+                    android:id="@+id/et_score"
+                    style="@style/bg_mEditView"
+                    android:hint="期末成绩" />
+            </LinearLayout>
 
-            <Spinner
-                android:id="@+id/spinner"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="14dp"/>
+                android:orientation="vertical">
+                <TextView
+                    style="@style/mTextView"
+                    android:text="选修学期"/>
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/et_ex"
                 style="@style/bg_mEditView"
                 android:lines="3"
                 android:maxLines="10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="14dp"
                 android:gravity="start"
                 android:hint="其他说明" />
 
@@ -78,12 +119,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:text="匿名"
                     android:layout_gravity="center_vertical"/>
 
             </LinearLayout>
-
 
 
             <Button
@@ -94,7 +134,7 @@
                 android:background="@drawable/shape_bg_red"
                 android:text="提   交"
                 android:textStyle="bold"
-                android:textSize="25dp"
+                android:textSize="15dp"
                 android:textColor="#FFFFFF"/>
 
         </LinearLayout>

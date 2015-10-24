@@ -1,2 +1,1 @@
-include ':app'
-include 'XhsEmoticonsKeyboard'
+include 'XhsEmoticonsKeyboard', ':XhsEmoticonsKeyboard', ':app'
