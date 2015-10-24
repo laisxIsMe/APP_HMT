@@ -31,7 +31,7 @@
             android:name=".activities.HmtPartitionActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.SendPostThreads"
+            android:name=".activities.SendPostThreadsActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.SplashActivity"

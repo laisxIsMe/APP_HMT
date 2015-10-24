@@ -1,20 +1,19 @@
 package cn.edu.scau.hometown.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +37,7 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  * app启动的第一个类
  */
 public class LoginWebViewActivity extends SwipeBackActivity {
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private LinearLayout back_2;
+    private SwipeRefreshLayout mSwipeRefreshWidget;
     private WebView webView;
     private String client_id = "client_id=11";
     private String redirect_url = "redirect_url=" + HttpUtil.getPsdnIp();
@@ -62,20 +60,25 @@ public class LoginWebViewActivity extends SwipeBackActivity {
                 scrollToFinishActivity();
             }
         });
-        login_title= (TextView) findViewById(R.id.login_title);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_web_view);
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
-        swipeRefreshLayout.setEnabled(false);
+        login_title = (TextView) findViewById(R.id.login_title);
+        mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.swipe_container_web_view);
+        mSwipeRefreshWidget.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        mSwipeRefreshWidget.setEnabled(false);
         initWebView();
 
         CookieSyncManager.createInstance(getApplicationContext());
         CookieManager.getInstance().removeAllCookie();//【清除Cookie，让用户每一次登录都是全新的登录状态，不保存用户登录信息】
     }
+
     private void initWebView() {
         webView = (WebView) findViewById(R.id.webview);
+//        webView.loadUrl("http://hometown.scau.edu.cn/open/OAuth/authorize?"
+//                + client_id + "&" + redirect_url + "&" + state + "&"
+//                + response_type);
         webView.loadUrl("http://hometown.scau.edu.cn/open/OAuth/authorize?"
-                + client_id + "&" + redirect_url + "&" + state + "&"
-                + response_type);
+                + client_id + "&" + "redirect_url=localhost" + "&" + state + "&"
+                + "response_type=token" + "&scope=bbs");
+// webView.loadUrl("http://hometown.scau.edu.cn/open/OAuth/authorize?client_id=11&"+redirect_url+"&state=1ebUaX94z0QAdrX4G2t2eTidkI1jOfhi&response_type=token&scope=bbs");
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.requestFocus();
@@ -95,15 +98,21 @@ public class LoginWebViewActivity extends SwipeBackActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                swipeRefreshLayout.setRefreshing(true);
+                mSwipeRefreshWidget.setRefreshing(true);
+
+
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                swipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshWidget.setRefreshing(false);
+
                 if (url.contains("uid")) {
                     //【url包含uid，说明登陆成功了，可以获取用户的标识ID，再根据用户的标识ID，发出另一个请求从而获取到用户的所有基本信息】
+                    access_token = url.substring(url.indexOf("#access_token") + 14, url.indexOf("&expires_in"));
+                    saveAccessToken(LoginWebViewActivity.this,access_token);
                     getUserInfoTask(url);
+
 
                 }
 
@@ -112,7 +121,25 @@ public class LoginWebViewActivity extends SwipeBackActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (!url.contains("uid")) view.loadUrl(url);//【登陆成功后不显示页面】
+                if (!url.contains("uid"))
+
+                    view.loadUrl(url);          //【登陆成功后不显示页面】
+
+
+                // }
+//                if(url.contains("uid"))
+//                {access_token=url.substring(url.indexOf("#access_token")+14,url.indexOf("&expires_in"));
+//
+//                    try {
+//                       // view.postUrl("http://hometown.scau.edu.cn/bbs/plugin.php", URLEncoder.encode("id=iltc_open:post&access_token="+access_token+"&tid=856719&message=NO_Money!!","utf-8").getBytes());
+//                       // view.postUrl("http://hometown.scau.edu.cn/bbs/plugin.php",("id=iltc_open:post&access_token="+access_token+"&tid=856719&message=NO_Money!!").getBytes());
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+
+
                 return true;
             }
 
@@ -126,8 +153,8 @@ public class LoginWebViewActivity extends SwipeBackActivity {
      */
     private void getUserInfoTask(String url) {
         uid = url.substring(url.indexOf("&uid") + 5);
-        // access_token=url.substring(url.indexOf("#access_token")+14,url.indexOf("&expires_in"));
-        // expires_in=url.substring(url.indexOf("&expires_in")+12,url.indexOf("&scope"));
+        access_token = url.substring(url.indexOf("#access_token") + 14, url.indexOf("&expires_in"));
+        expires_in = url.substring(url.indexOf("&expires_in") + 12, url.indexOf("&scope"));
         try {
             String useruUrl = HttpUtil.GET_HMT_USER_BASE_INFORMATION_URL_BY_USER_ID + uid;
             JsonObjectRequest mJsonRequest = new JsonObjectRequest(useruUrl, null,
@@ -197,5 +224,12 @@ public class LoginWebViewActivity extends SwipeBackActivity {
     public void onBackPressed() {
 
         scrollToFinishActivity();
+    }
+
+    private void saveAccessToken(Context context,String string){
+        SharedPreferences sp = context.getSharedPreferences("config", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("accessToken", string);
+        editor.commit();
     }
 }

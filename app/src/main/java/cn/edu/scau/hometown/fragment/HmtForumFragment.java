@@ -3,24 +3,21 @@ package cn.edu.scau.hometown.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.LruCache;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -35,7 +32,6 @@ import java.util.List;
 import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.activities.DetialHmtPostThreadsActivity;
-import cn.edu.scau.hometown.activities.MainActivity;
 import cn.edu.scau.hometown.adapter.InitHmtForumListViewAdapter;
 import cn.edu.scau.hometown.bean.HmtForumPostContent;
 import cn.edu.scau.hometown.bean.HmtForumPostList;
@@ -48,7 +44,7 @@ import cn.edu.scau.hometown.tools.HttpUtil;
  * Created by acer on 2015/7/24.
  */
 public class HmtForumFragment extends Fragment {
-    private SwipeRefreshLayout lo_swiper;
+    private SwipeRefreshLayout mSwipeRefreshWidget;
     //总视图
     private View view;
     //显示热门帖子的RecycleView
@@ -76,13 +72,15 @@ public class HmtForumFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_hmt_forum, container, false);
-        lo_swiper = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container_hmt_forum);
-        lo_swiper.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
-        lo_swiper.setEnabled(false);
-
+        mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container_hmt_forum);
+        mSwipeRefreshWidget.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        mSwipeRefreshWidget.setEnabled(false);
+        mSwipeRefreshWidget.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
 
         VolleyRequestString(HttpUtil.GET_PICTURES_GUIDE_TO_THREADS, 3);
-        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + "36", 1);
+        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + "36"+"&page=1&limit=20", 1);
 
         return view;
     }
@@ -149,7 +147,7 @@ public class HmtForumFragment extends Fragment {
 
 
     private void VolleyRequestString(String url, final int searchType) {
-        lo_swiper.setRefreshing(true);
+        mSwipeRefreshWidget.setRefreshing(true);
         JsonObjectRequest mJsonRequest = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -176,7 +174,7 @@ public class HmtForumFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        lo_swiper.setRefreshing(false);
+                        mSwipeRefreshWidget.setRefreshing(false);
 
                         Boolean connected1 = HttpUtil.isNetworkConnected(getActivity());
                         Boolean connected2 = HttpUtil.isWifiConnected(getActivity());
@@ -200,6 +198,7 @@ public class HmtForumFragment extends Fragment {
         }.getType();
         hmtForumPostList = gson.fromJson(json, type);
         initHmtForumListView();
+        mSwipeRefreshWidget.setRefreshing(false);
     }
 
     /**
@@ -214,7 +213,7 @@ public class HmtForumFragment extends Fragment {
         Intent intent = new Intent(getActivity(), DetialHmtPostThreadsActivity.class);
         intent.putExtra("hmtForumPostContent", hmtForumPostContent);
         intent.putExtra("tid", tid);
-        lo_swiper.setRefreshing(false);
+        mSwipeRefreshWidget.setRefreshing(false);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.keep);
     }
