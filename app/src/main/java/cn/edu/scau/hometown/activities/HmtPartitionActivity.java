@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,16 +34,16 @@ import cn.edu.scau.hometown.tools.HttpUtil;
  * Created by Administrator on 2015/10/4 0004.
  */
 public class HmtPartitionActivity extends AppCompatActivity {
-    private Toolbar toolbar;
-    private SwipeRefreshLayout setRefreshing;
+
+
     private String tid;
-    //Volley网络请求会用到的工具
+    private String title;
+    private int nextPage = 1;
+    private Toolbar toolbar;
+    private Integer lastVisibleItem;
     private RequestQueue mRequestQueue;
     private HmtForumPostList hmtForumPostList;
-    //论坛图片信息类
-    private RecyclerView rcv_hmt_forum;
-    private String title;
-    //渲染热门帖子列表视图的自定义Adapter
+    private SwipeRefreshLayout mSwipeRefreshWidget;
     private InitHmtForumListViewAdapter initHmtForumListViewAdapter;
 
     @Override
@@ -50,9 +51,14 @@ public class HmtPartitionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partition);
         initToolBar();
+
+
         mRequestQueue = Volley.newRequestQueue(HmtPartitionActivity.this);
-        setRefreshing = (SwipeRefreshLayout) findViewById(R.id.setRefreshing);
-        setRefreshing.setEnabled(false);
+        mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.setRefreshing);
+        mSwipeRefreshWidget.setEnabled(false);
+        mSwipeRefreshWidget.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
         VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title), 1);
 
 
@@ -106,7 +112,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
     }
 
     private void VolleyRequestString(String url, final int searchType) {
-        setRefreshing.setRefreshing(true);
+        mSwipeRefreshWidget.setRefreshing(true);
         JsonObjectRequest mJsonRequest = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -116,6 +122,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
                         switch (searchType) {
                             case 1:
                                 SearchHmtForumDataTask(json);
+                                nextPage++;
                                 break;
                             case 2:
                                 SearchPostContentTask(json);
@@ -130,7 +137,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        setRefreshing.setRefreshing(false);
+                        mSwipeRefreshWidget.setRefreshing(false);
 
                         Boolean connected1 = HttpUtil.isNetworkConnected(HmtPartitionActivity.this);
                         Boolean connected2 = HttpUtil.isWifiConnected(HmtPartitionActivity.this);
@@ -152,7 +159,13 @@ public class HmtPartitionActivity extends AppCompatActivity {
         Gson gson = new Gson();
         java.lang.reflect.Type type = new TypeToken<HmtForumPostList>() {
         }.getType();
-        hmtForumPostList = gson.fromJson(json, type);
+
+        if (hmtForumPostList == null)
+            hmtForumPostList = gson.fromJson(json, type);
+        else {
+            HmtForumPostList newHmtForumPostList = gson.fromJson(json, type);
+            hmtForumPostList.getThreads().addAll(newHmtForumPostList.getThreads());
+        }
         initRecycleView();
     }
 
@@ -168,16 +181,17 @@ public class HmtPartitionActivity extends AppCompatActivity {
         Intent intent = new Intent(HmtPartitionActivity.this, DetialHmtPostThreadsActivity.class);
         intent.putExtra("hmtForumPostContent", hmtForumPostContent);
         intent.putExtra("tid", tid);
-        setRefreshing.setRefreshing(false);
+        mSwipeRefreshWidget.setRefreshing(false);
         startActivity(intent);
     }
 
 
     private void initRecycleView() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
-        rcv_hmt_forum = (RecyclerView) findViewById(R.id.rcv_detail_partition);
-        rcv_hmt_forum.setLayoutManager(new LinearLayoutManager(this));
-        initHmtForumListViewAdapter = new InitHmtForumListViewAdapter(hmtForumPostList,getApplication());
+        RecyclerView rcv_hmt_forum = (RecyclerView) findViewById(R.id.rcv_detail_partition);
+        rcv_hmt_forum.setLayoutManager(linearLayoutManager);
+        initHmtForumListViewAdapter = new InitHmtForumListViewAdapter(hmtForumPostList, getApplication());
         rcv_hmt_forum.setAdapter(initHmtForumListViewAdapter);
         rcv_hmt_forum.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
@@ -188,6 +202,31 @@ public class HmtPartitionActivity extends AppCompatActivity {
                     }
                 })
         );
+
+
+//        rcv_hmt_forum.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView,
+//                                             int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE
+//                        && lastVisibleItem + 1 == initHmtForumListViewAdapter.getItemCount()) {
+//
+//                    //VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title)+"&page="+nextPage+"&limit=20", 1);
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//            }
+//
+//        });
+
+
+        mSwipeRefreshWidget.setRefreshing(false);
     }
 
 }

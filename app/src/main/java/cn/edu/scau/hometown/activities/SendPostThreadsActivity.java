@@ -1,5 +1,7 @@
 package cn.edu.scau.hometown.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +13,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.keyboard.EmoticonsKeyBoardPopWindow;
-import com.keyboard.utils.Utils;
 import com.keyboard.view.EmoticonsEditText;
 
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.tools.EmoticonsUtils;
 
-public class SendPostThreads extends AppCompatActivity {
+public class SendPostThreadsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private String author;
     private EmoticonsKeyBoardPopWindow mKeyBoardPopWindow;
@@ -44,7 +45,7 @@ public class SendPostThreads extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplication(), et_content.getText().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(), et_content.getText().toString()+"\n"+getAccessToken(SendPostThreadsActivity.this), Toast.LENGTH_LONG).show();
             }
         });
         initKeyBoardPopWindow();
@@ -84,5 +85,10 @@ public class SendPostThreads extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String getAccessToken(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("config", MODE_PRIVATE);
+        return  sp.getString("accessToken", "尚未授权").toString();
     }
 }

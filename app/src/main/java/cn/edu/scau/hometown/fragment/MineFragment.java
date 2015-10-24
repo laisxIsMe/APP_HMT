@@ -95,11 +95,13 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) return;
-        hmtUserBasedInfo = (HmtUserBasedInfo) data.getSerializableExtra("LoginResult");
+        HmtUserBasedInfo   tempHmtUserBasedInfo = (HmtUserBasedInfo) data.getSerializableExtra("LoginResult");
+        ((MyApplication)(getActivity().getApplication())).setHmtUserBasedInfo(tempHmtUserBasedInfo);
         LoginSuccess();
     }
   //成功登陆后利用获取到的用户信息类更新视图
     private void LoginSuccess() {
+        hmtUserBasedInfo=((MyApplication)(getActivity().getApplication())).getHmtUserBasedInfo();
         String userName = hmtUserBasedInfo.getData().getUsername();
         String userEmail = hmtUserBasedInfo.getData().getEmail();
         String userML = hmtUserBasedInfo.getData().getMl();

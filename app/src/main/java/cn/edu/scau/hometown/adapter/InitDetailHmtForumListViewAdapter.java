@@ -16,12 +16,9 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,18 +29,16 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.activities.LoginWebViewActivity;
-import cn.edu.scau.hometown.activities.SendPostThreads;
+import cn.edu.scau.hometown.activities.SendPostThreadsActivity;
 import cn.edu.scau.hometown.bean.HmtForumPostContent;
 import cn.edu.scau.hometown.bean.HmtThreadsAttachment;
 import cn.edu.scau.hometown.tools.DataUtil;
@@ -113,7 +108,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         holder.tv_item_action_comment.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent i =new Intent(context, SendPostThreads.class);
+                Intent i =new Intent(context, SendPostThreadsActivity.class);
                 i.putExtra("author",name);
                 context.startActivity(i);
             }
