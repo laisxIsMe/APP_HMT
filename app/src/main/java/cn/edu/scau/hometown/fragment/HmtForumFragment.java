@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -142,6 +143,8 @@ public class HmtForumFragment extends Fragment {
                     }
                 })
         );
+        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
+        header.attachTo(rcv_hmt_forum, true);
 
     }
 

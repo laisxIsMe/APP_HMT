@@ -87,7 +87,11 @@ public class HmtPartitionActivity extends AppCompatActivity {
         else if (name.equals("同道堂")) return "136";
         else if (name.equals("广而告之")) return "101";
         else if (name.equals("电脑维修")) return "125";
-        else if (name.equals("游戏版")) return "32";
+        else if (name.equals("兼职地带")) return "142";
+        else if (name.equals("论坛站务")) return "39";
+        else if (name.equals("深度思考")) return "55";
+        else if (name.equals("二手市场")) return "95";
+        else if (name.equals("社团组织招新")) return "145";
         return "71";
 
     }
