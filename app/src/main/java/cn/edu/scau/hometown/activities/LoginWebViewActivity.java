@@ -107,6 +107,9 @@ public class LoginWebViewActivity extends SwipeBackActivity {
             public void onPageFinished(WebView view, String url) {
                 mSwipeRefreshWidget.setRefreshing(false);
 
+
+
+
                 if (url.contains("uid")) {
                     //【url包含uid，说明登陆成功了，可以获取用户的标识ID，再根据用户的标识ID，发出另一个请求从而获取到用户的所有基本信息】
                     access_token = url.substring(url.indexOf("#access_token") + 14, url.indexOf("&expires_in"));
@@ -124,21 +127,6 @@ public class LoginWebViewActivity extends SwipeBackActivity {
                 if (!url.contains("uid"))
 
                     view.loadUrl(url);          //【登陆成功后不显示页面】
-
-
-                // }
-//                if(url.contains("uid"))
-//                {access_token=url.substring(url.indexOf("#access_token")+14,url.indexOf("&expires_in"));
-//
-//                    try {
-//                       // view.postUrl("http://hometown.scau.edu.cn/bbs/plugin.php", URLEncoder.encode("id=iltc_open:post&access_token="+access_token+"&tid=856719&message=NO_Money!!","utf-8").getBytes());
-//                       // view.postUrl("http://hometown.scau.edu.cn/bbs/plugin.php",("id=iltc_open:post&access_token="+access_token+"&tid=856719&message=NO_Money!!").getBytes());
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-
 
                 return true;
             }
