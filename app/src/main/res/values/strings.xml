@@ -14,4 +14,5 @@
     <string name="action_settings">设置</string>
     <drawable name="clr_normal">@color/tab_blue</drawable>
     <drawable name="clr_pressed">@color/tab_blue</drawable>
+    <drawable name="ll_pressed">@color/ll_pressed</drawable>
 </resources>

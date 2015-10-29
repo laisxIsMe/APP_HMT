@@ -52,7 +52,10 @@
             android:name=".activities.DetialUsedMarketActivity"
             android:theme="@style/AppTheme.Transparent"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".activities.SettingActivity"
 
+            android:theme="@style/AppTheme">
+        </activity>
 
     </application>
 
