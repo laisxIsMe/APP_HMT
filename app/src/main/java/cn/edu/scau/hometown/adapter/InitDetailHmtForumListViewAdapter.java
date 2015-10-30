@@ -93,8 +93,10 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         message = message.replaceAll("\\[/attach\\]", "【/attach】\n");
         message = message.replaceAll("\\[.*?\\]", "");
         final String name = postsEntity.getAuthor();
+
         String authorId = postsEntity.getAuthorid();
         String lastpost = postsEntity.getDateline();
+
         if (position == 0) {
             holder.tv_floor.setText("楼主");
             holder.tv_time_of_detail_forum_threads.setText("发表于 " + DataUtil.times(lastpost));
@@ -110,6 +112,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
             public void onClick(View v) {
                 Intent i =new Intent(context, SendPostThreadsActivity.class);
                 i.putExtra("author",name);
+                i.putExtra("tid",tid);
                 context.startActivity(i);
             }
         });
@@ -150,7 +153,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         EditEmoj(spannableString, tv);
         EditUrl(spannableString);
         EditModified(spannableString);
-        EditAttach(tv, spannableString);
+       // EditAttach(tv, spannableString);
 
         return spannableString;
     }

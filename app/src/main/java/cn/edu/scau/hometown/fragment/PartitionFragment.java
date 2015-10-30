@@ -70,6 +70,11 @@ public class PartitionFragment extends Fragment {
         icon.add(R.drawable.partition_advertise);
         icon.add(R.drawable.partition_weixiu);
         icon.add(R.drawable.partition_game);
+        icon.add(R.drawable.partition_part_time);
+        icon.add(R.drawable.partition_forum);
+        icon.add(R.drawable.partition_think);
+        icon.add(R.drawable.partition_secound_market);
+        icon.add(R.drawable.partition_recruit);
 
 
         iconName = new ArrayList<>();
@@ -87,6 +92,13 @@ public class PartitionFragment extends Fragment {
         iconName.add("广而告之");
         iconName.add("电脑维修");
         iconName.add("游戏版");
+        iconName.add("兼职地带");
+        iconName.add("论坛站务");
+        iconName.add("深度思考");
+        iconName.add("二手市场");
+        iconName.add("社团组织招新");
+
+
 
     }
 

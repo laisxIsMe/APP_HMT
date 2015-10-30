@@ -20,6 +20,7 @@ import cn.edu.scau.hometown.MyApplication;
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.activities.LoginWebViewActivity;
 import cn.edu.scau.hometown.activities.SearchCoursesActivity;
+import cn.edu.scau.hometown.activities.SettingActivity;
 import cn.edu.scau.hometown.bean.HmtUserBasedInfo;
 import cn.edu.scau.hometown.tools.DataUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,6 +51,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private TextView tv_user_groupName;
     //使用Volley网络通信框架会用到的请求队列对象
     private RequestQueue mRequestQueue;
+    //用户设置
+    private LinearLayout ll_setting;
 
 
     @Override
@@ -76,6 +79,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private void setListener() {
         ll_search_course.setOnClickListener(this);
         civ_user_icon.setOnClickListener(this);
+        ll_setting.setOnClickListener(this);
     }
 
     private void findViews(View view) {
@@ -88,6 +92,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         civ_user_icon = (CircleImageView) view.findViewById(R.id.civ_user_icon);
         tv_user_ml = (TextView) view.findViewById(R.id.tv_user_ml);
         tv_user_groupName = (TextView) view.findViewById(R.id.me_message_groupname);
+        ll_setting=(LinearLayout) view.findViewById(R.id.ll_setting);
     }
 
 
@@ -157,6 +162,11 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_search_course:
                 Intent i2 = new Intent(getActivity(),SearchCoursesActivity.class);
                 startActivity(i2);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.keep);
+                break;
+            case R.id.ll_setting:
+                Intent i3 = new Intent(getActivity(),SettingActivity.class);
+                startActivity(i3);
                 getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.keep);
                 break;
             default:
