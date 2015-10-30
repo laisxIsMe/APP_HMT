@@ -169,7 +169,8 @@
 
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@drawable/minefragment_selector">
 
                     <ImageView
                         android:layout_width="90dp"
@@ -191,7 +192,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@drawable/minefragment_selector">
 
                     <ImageView
                         android:layout_width="90dp"
@@ -210,10 +212,12 @@
 
 
                 <LinearLayout
+                    android:id="@+id/ll_setting"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@drawable/minefragment_selector">
 
                     <ImageView
                         android:layout_width="90dp"
@@ -234,7 +238,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@drawable/minefragment_selector">
 
                     <ImageView
                         android:layout_width="90dp"
