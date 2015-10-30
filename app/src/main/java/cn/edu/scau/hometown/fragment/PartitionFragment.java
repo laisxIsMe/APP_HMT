@@ -16,14 +16,16 @@ import java.util.ArrayList;
 
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.activities.HmtPartitionActivity;
+import cn.edu.scau.hometown.activities.PublishPostActivity;
 import cn.edu.scau.hometown.listener.RecyclerItemClickListener;
+import fab.FloatingActionButton;
 
 /**
  * Created by Administrator on 2015/10/3 0003.
  */
 public class PartitionFragment extends Fragment {
     private RecyclerView rcv_partition;
-
+    private FloatingActionButton floatingActionButton;
     private ArrayList<Integer> icon;
     private ArrayList<String> iconName;
 
@@ -51,6 +53,22 @@ public class PartitionFragment extends Fragment {
                     }
                 })
         );
+
+        floatingActionButton = (FloatingActionButton)view.findViewById(R.id.fab);
+        floatingActionButton.attachToRecyclerView(rcv_partition);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if(((MyApplication)(getActivity().getApplication())).getHmtUserBasedInfo()==null){
+//                    Toast.makeText(getActivity(), "发帖前请先登录", Toast.LENGTH_SHORT).show();
+//                } else {
+                Intent intent = new Intent(getActivity(), PublishPostActivity.class);
+                startActivity(intent);
+//                }
+
+            }
+        });
+
         return view;
     }
 

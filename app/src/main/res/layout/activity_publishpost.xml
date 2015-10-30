@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <com.keyboard.view.EmoticonsEditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:textColor="#000000"
+        android:hint="编辑标题："
+        android:textColorHint="#ffacacac"
+        android:focusable="true"
+        android:textSize="14sp"
+        android:padding="10dp"
+        ></com.keyboard.view.EmoticonsEditText>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.6dp"
+        android:background="#e3e3e3" />
+
+    <com.keyboard.view.EmoticonsEditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_gravity="top"
+        android:background="@color/white"
+        android:gravity="top"
+        android:hint="编辑内容："
+        android:inputType="textMultiLine"
+        android:minLines="6"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#ffacacac"
+        android:focusable="true"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.6dp"
+        android:background="#e3e3e3" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        >
+
+        <ImageView
+            android:id="@+id/iv_expression"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:src="@drawable/icon_emotion" />
+
+        <ImageView
+            android:id="@+id/iv_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/iv_expression"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
+            android:src="@drawable/icon_picture"></ImageView>
+<CheckBox
+    android:id="@+id/cb_Anonymous"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:text="匿名"
+    android:layout_toLeftOf="@+id/bt_publish"
+    android:layout_marginRight="10dp"
+    />
+
+        <Button
+            android:id="@+id/bt_publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:onClick="publish_post"
+            android:text="发表"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@color/tab_blue"
+            />
+    </RelativeLayout>
+</LinearLayout>
