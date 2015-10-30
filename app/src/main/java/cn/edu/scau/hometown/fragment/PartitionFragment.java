@@ -103,8 +103,8 @@ public class PartitionFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.partition_tv.setText(iconName.get(position));
-            holder.partition_image.setImageDrawable(getResources().getDrawable(icon.get(position)));
+//            holder.partition_tv.setText(iconName.get(position));
+//            holder.partition_image.setImageDrawable(getResources().getDrawable(icon.get(position)));
         }
 
         @Override

@@ -59,7 +59,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
         mSwipeRefreshWidget.setProgressViewOffset(false, 0, (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
-        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title), 1);
+        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID +  getFidByPartitionName(title)+"&page="+nextPage+"&limit=30", 1);
 
 
     }
@@ -111,6 +111,11 @@ public class HmtPartitionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *
+     * @param url
+     * @param searchType  1、表示获取帖子列表 ； 2、表示获取点击帖子的详情、评论
+     */
     private void VolleyRequestString(String url, final int searchType) {
         mSwipeRefreshWidget.setRefreshing(true);
         JsonObjectRequest mJsonRequest = new JsonObjectRequest(url, null,
@@ -187,6 +192,8 @@ public class HmtPartitionActivity extends AppCompatActivity {
 
 
     private void initRecycleView() {
+        mSwipeRefreshWidget.setRefreshing(true);
+
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
         RecyclerView rcv_hmt_forum = (RecyclerView) findViewById(R.id.rcv_detail_partition);
@@ -204,26 +211,29 @@ public class HmtPartitionActivity extends AppCompatActivity {
         );
 
 
-//        rcv_hmt_forum.setOnScrollListener(new RecyclerView.OnScrollListener() {
-//
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView,
-//                                             int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE
-//                        && lastVisibleItem + 1 == initHmtForumListViewAdapter.getItemCount()) {
-//
-//                    //VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title)+"&page="+nextPage+"&limit=20", 1);
-//                }
-//            }
-//
+        rcv_hmt_forum.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView,
+                                             int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastVisibleItem + 4 >= initHmtForumListViewAdapter.getItemCount()) {
+
+                    VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title)+"&page="+nextPage+"&limit=30", 1);
+
+                    initRecycleView();
+                }
+            }
+
 //            @Override
 //            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 //                super.onScrolled(recyclerView, dx, dy);
 //                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 //            }
-//
-//        });
+
+        });
 
 
         mSwipeRefreshWidget.setRefreshing(false);
