@@ -7,6 +7,8 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:title">""</item>
+        <item name="colorPrimary">#2196F3</item>
+        <item name="colorPrimaryDark">#1565C0</item>
         <!--  状态栏颜色跟随ToolBar颜色变动
         <item name="android:windowTranslucentStatus" tools:targetApi="19">true</item><!-->
     </style>

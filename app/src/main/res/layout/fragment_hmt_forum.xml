@@ -13,8 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         >
-
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -24,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|top" />
-
             <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
                 android:id="@+id/header"
                 android:layout_width="match_parent"
