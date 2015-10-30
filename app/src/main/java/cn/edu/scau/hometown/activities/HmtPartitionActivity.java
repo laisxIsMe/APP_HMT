@@ -2,6 +2,8 @@ package cn.edu.scau.hometown.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +45,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
     private Integer lastVisibleItem;
     private RequestQueue mRequestQueue;
     private HmtForumPostList hmtForumPostList;
+    private CoordinatorLayout rootView;
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private InitHmtForumListViewAdapter initHmtForumListViewAdapter;
 
@@ -52,7 +55,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_partition);
         initToolBar();
 
-
+        rootView= (CoordinatorLayout) findViewById(R.id.rootview1);
         mRequestQueue = Volley.newRequestQueue(HmtPartitionActivity.this);
         mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.setRefreshing);
         mSwipeRefreshWidget.setEnabled(false);
@@ -87,7 +90,12 @@ public class HmtPartitionActivity extends AppCompatActivity {
         else if (name.equals("同道堂")) return "136";
         else if (name.equals("广而告之")) return "101";
         else if (name.equals("电脑维修")) return "125";
-        else if (name.equals("游戏版")) return "32";
+        else if (name.equals("兼职地带")) return "142";
+        else if (name.equals("论坛站务")) return "39";
+        else if (name.equals("深度思考")) return "55";
+        else if (name.equals("二手市场")) return "95";
+        else if (name.equals("游戏版"))   return "110";
+        else if (name.equals("社团组织招新")) return "145";
         return "71";
 
     }
@@ -138,13 +146,15 @@ public class HmtPartitionActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mSwipeRefreshWidget.setRefreshing(false);
-
+                        Snackbar sb = Snackbar.make(rootView, "发送失败", Snackbar.LENGTH_SHORT);
+                        sb.getView().setBackgroundColor(getResources().getColor(R.color.tab_blue));
                         Boolean connected1 = HttpUtil.isNetworkConnected(HmtPartitionActivity.this);
                         Boolean connected2 = HttpUtil.isWifiConnected(HmtPartitionActivity.this);
                         if (connected1 == false && connected2 == false)
-                            Toast.makeText(HmtPartitionActivity.this, "请检查网络！", Toast.LENGTH_LONG).show();
+                            sb.setText( "                                                              请检查网络！");
                         else
-                            Toast.makeText(HmtPartitionActivity.this, "(*@ο@*) 哇～  很抱歉！服务器出问题了～", Toast.LENGTH_LONG).show();
+                        sb.setText("(*@ο@*) 哇～  很抱歉！服务器出问题了～");
+                        sb.show();
                     }
                 }
         );
