@@ -54,6 +54,8 @@
         <activity android:name=".activities.SettingActivity"
             android:theme="@style/AppTheme">
         </activity>
+        <activity android:name=".activities.PublishPostActivity"
+            android:theme="@style/AppTheme" />
 
     </application>
 

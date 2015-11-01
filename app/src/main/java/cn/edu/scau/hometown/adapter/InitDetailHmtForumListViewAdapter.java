@@ -351,8 +351,8 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                 //存入缓存和SD卡中
                 //存原图  第二个参数是一个key
                 ImageBuffer.saveBmpToSd(response, url);
-                //存缩放图  "Scaled"+url 标识缩放图
-                ImageBuffer.saveBmpToSd(bitmap, "Scaled"+url);
+                //存缩放图
+                ImageBuffer.saveScaledBmpToSd(bitmap, url);
 
 
        }

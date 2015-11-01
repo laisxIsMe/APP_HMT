@@ -27,14 +27,14 @@ public class ImageBuffer {
    // 计算存储目录下的文件大小，当文件总大小大于规定的CACHE_SIZE
    // 或者sdcard剩余空间小于FREE_SD_SPACE_NEEDED_TO_CACHE
    //那么删除40%最近没有被使用的文件,（MB）
-    static   int CACHE_SIZE=15;
+     static   int CACHE_SIZE=15;
 
-    static  int FREE_SD_SPACE_NEEDED_TO_CACHE=5;
+     static  int FREE_SD_SPACE_NEEDED_TO_CACHE=5;
 
      static   int MB=1024;
     //缓存图片前缀标识
     static    CharSequence WHOLESALE_CONV="ImageBuffer_";
-   //    设置图片有效天数
+   // 设置图片有效天数
      static int day=5;
 
      static long mTimeDiff=1000*60*60*24*day;
@@ -49,7 +49,7 @@ public class ImageBuffer {
       String filename =convertUrlToFileName(url);
       String dir = getDirectory(filename);
       File file = new File(dir +"/" + filename);
-      Log.i("exists---->", String.valueOf(file.exists()));
+
       return  file.exists();
 
   }
@@ -61,8 +61,6 @@ public class ImageBuffer {
 *
 * */
     public static Bitmap getBitmap(String url){
-        Log.i("wigth1---->", "取出");
-
         Bitmap bitmap;
         String filename =convertUrlToFileName(url);
         String dir = getDirectory(filename);
@@ -95,7 +93,7 @@ public class ImageBuffer {
     }
     //获取缩略图
     public static Bitmap getScaledBitmap(String url){
-        Log.i("wigth1---->", "取出");
+
 
         //前缀Scaled表明是缩略图
         url="Scaled"+url;
@@ -109,9 +107,7 @@ public class ImageBuffer {
             bitmap=reference.get();
 
             if(bitmap!=null){
-                Log.i("loveoo---->", "取出");
-
-                updateFileTime(dir,filename);
+                  updateFileTime(dir,filename);
                 return bitmap;
             }
         }
@@ -145,7 +141,6 @@ public class ImageBuffer {
             Log.w(TAG, "Low free space onsd, do not cache");
            // return;
         }
-       Log.i("wigth1---->", "存入");
 
        //软引用，再次打开页面时快速获取图片
 
@@ -158,7 +153,6 @@ public class ImageBuffer {
 
         try {
            if(file.createNewFile()) {
-               Log.i("tag---->", "000");
                OutputStream outStream = new FileOutputStream(dir +"/" + filename);
                bm.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
                outStream.flush();
@@ -172,7 +166,47 @@ public class ImageBuffer {
         }
     }
 
+public static void saveScaledBmpToSd(Bitmap bm,String url){
+    //前缀Scaled表明是缩略图
+    url="Scaled"+url;
+    String filename =convertUrlToFileName(url);
+    String dir = getDirectory(filename);
+    if (bm == null) {
+        Log.w(TAG, " trying to savenull bitmap");
+        return;
+    }
+    //判断sdcard上的空间
+    if (FREE_SD_SPACE_NEEDED_TO_CACHE >freeSpaceOnSd()) {
 
+        removeCache(dir);
+        Log.w(TAG, "Low free space onsd, do not cache");
+        // return;
+    }
+
+
+    //软引用，再次打开页面时快速获取图片
+
+    SoftReference<Bitmap> reference=new SoftReference<>(bm);
+    map.put(filename, reference);
+     File file = new File(dir +"/"+filename);
+
+    try {
+        if(file.createNewFile()) {
+
+            OutputStream outStream = new FileOutputStream(dir +"/" + filename);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+
+        }
+    } catch (FileNotFoundException e) {
+        Log.w(TAG,"FileNotFoundException**");
+    } catch (IOException e) {
+        Log.w("test----->", e.toString());
+    }
+
+
+}
 
     /**
      * 计算sdcard上的剩余空间
