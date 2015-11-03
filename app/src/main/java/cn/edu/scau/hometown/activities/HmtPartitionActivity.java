@@ -9,11 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -48,6 +48,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
     private CoordinatorLayout rootView;
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private InitHmtForumListViewAdapter initHmtForumListViewAdapter;
+    private RecyclerView rcv_hmt_forum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
         mSwipeRefreshWidget.setProgressViewOffset(false, 0, (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
-        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID +  getFidByPartitionName(title)+"&page="+nextPage+"&limit=30", 1);
+        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title) + "&page=" + nextPage + "&limit=30", 1);
 
 
     }
@@ -175,13 +176,16 @@ public class HmtPartitionActivity extends AppCompatActivity {
         java.lang.reflect.Type type = new TypeToken<HmtForumPostList>() {
         }.getType();
 
-        if (hmtForumPostList == null)
+        if (hmtForumPostList == null){
             hmtForumPostList = gson.fromJson(json, type);
+            initRecycleView();
+        }
+
         else {
             HmtForumPostList newHmtForumPostList = gson.fromJson(json, type);
             hmtForumPostList.getThreads().addAll(newHmtForumPostList.getThreads());
+            initHmtForumListViewAdapter.notifyDataSetChanged();
         }
-        initRecycleView();
     }
 
     /**
@@ -193,6 +197,8 @@ public class HmtPartitionActivity extends AppCompatActivity {
         }.getType();
         HmtForumPostContent hmtForumPostContent = gson.fromJson(json, type);
 
+        Log.i("laisx","Intent");
+
         Intent intent = new Intent(HmtPartitionActivity.this, DetialHmtPostThreadsActivity.class);
         intent.putExtra("hmtForumPostContent", hmtForumPostContent);
         intent.putExtra("tid", tid);
@@ -202,18 +208,21 @@ public class HmtPartitionActivity extends AppCompatActivity {
 
 
     private void initRecycleView() {
-        mSwipeRefreshWidget.setRefreshing(true);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
-        RecyclerView rcv_hmt_forum = (RecyclerView) findViewById(R.id.rcv_detail_partition);
+        rcv_hmt_forum = (RecyclerView) findViewById(R.id.rcv_detail_partition);
         rcv_hmt_forum.setLayoutManager(linearLayoutManager);
         initHmtForumListViewAdapter = new InitHmtForumListViewAdapter(hmtForumPostList, getApplication());
         rcv_hmt_forum.setAdapter(initHmtForumListViewAdapter);
+        rcv_hmt_forum.requestDisallowInterceptTouchEvent(false);
         rcv_hmt_forum.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        mSwipeRefreshWidget.setRefreshing(true);
+                        rcv_hmt_forum.requestDisallowInterceptTouchEvent(true);
+                        Log.i("laisx",position+"");
                         tid = hmtForumPostList.getThreads().get(position).getTid();
                         VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid, 2);
                     }
@@ -221,32 +230,32 @@ public class HmtPartitionActivity extends AppCompatActivity {
         );
 
 
+        boolean tag = true;
         rcv_hmt_forum.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView,
                                              int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem + 4 >= initHmtForumListViewAdapter.getItemCount()) {
-
-                    VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title)+"&page="+nextPage+"&limit=30", 1);
-
-                    initRecycleView();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == initHmtForumListViewAdapter.getItemCount()){
+                    mSwipeRefreshWidget.setRefreshing(true);
                 }
+
             }
 
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-//            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (lastVisibleItem + 4 == initHmtForumListViewAdapter.getItemCount()) {
+                    VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title) + "&page=" + nextPage + "&limit=30", 1);
+                    initHmtForumListViewAdapter.notifyDataSetChanged();
+                    mSwipeRefreshWidget.setRefreshing(false);
+                }
+
+            }
         });
-
-
         mSwipeRefreshWidget.setRefreshing(false);
     }
-
 }
