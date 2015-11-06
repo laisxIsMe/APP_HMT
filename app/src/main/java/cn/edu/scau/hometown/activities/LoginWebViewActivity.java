@@ -211,7 +211,7 @@ public class LoginWebViewActivity extends SwipeBackActivity {
 
     @Override
     public void onBackPressed() {
-        Log.i("tag_back--->","dwqqqwr");
+
         super.scrollToFinishActivity();
     }
 
