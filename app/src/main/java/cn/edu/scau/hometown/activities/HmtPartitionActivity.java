@@ -56,7 +56,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_partition);
         initToolBar();
 
-        rootView= (CoordinatorLayout) findViewById(R.id.rootview1);
+        rootView= (CoordinatorLayout) findViewById(R.id.rootview2);
         mRequestQueue = Volley.newRequestQueue(HmtPartitionActivity.this);
         mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.setRefreshing);
         mSwipeRefreshWidget.setEnabled(false);
@@ -240,7 +240,6 @@ public class HmtPartitionActivity extends AppCompatActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == initHmtForumListViewAdapter.getItemCount()){
                     mSwipeRefreshWidget.setRefreshing(true);
                 }
-
             }
 
             @Override
