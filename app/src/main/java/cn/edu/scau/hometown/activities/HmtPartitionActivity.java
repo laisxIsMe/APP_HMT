@@ -49,6 +49,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private InitHmtForumListViewAdapter initHmtForumListViewAdapter;
     private RecyclerView rcv_hmt_forum;
+    private boolean isClick=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +207,11 @@ public class HmtPartitionActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        isClick=false;
+        super.onResume();
+    }
 
     private void initRecycleView() {
 
@@ -215,16 +221,16 @@ public class HmtPartitionActivity extends AppCompatActivity {
         rcv_hmt_forum.setLayoutManager(linearLayoutManager);
         initHmtForumListViewAdapter = new InitHmtForumListViewAdapter(hmtForumPostList, getApplication());
         rcv_hmt_forum.setAdapter(initHmtForumListViewAdapter);
-        rcv_hmt_forum.requestDisallowInterceptTouchEvent(false);
         rcv_hmt_forum.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        mSwipeRefreshWidget.setRefreshing(true);
-                        rcv_hmt_forum.requestDisallowInterceptTouchEvent(true);
-                        Log.i("laisx",position+"");
-                        tid = hmtForumPostList.getThreads().get(position).getTid();
-                        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid, 2);
+                        if(!isClick){
+                            mSwipeRefreshWidget.setRefreshing(true);
+                            tid = hmtForumPostList.getThreads().get(position).getTid();
+                            VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid + "&page=1&limit=10", 2);
+                        }
+                        isClick=true;
                     }
                 })
         );
@@ -237,7 +243,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
             public void onScrollStateChanged(RecyclerView recyclerView,
                                              int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == initHmtForumListViewAdapter.getItemCount()){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == initHmtForumListViewAdapter.getItemCount()) {
                     mSwipeRefreshWidget.setRefreshing(true);
                 }
             }
