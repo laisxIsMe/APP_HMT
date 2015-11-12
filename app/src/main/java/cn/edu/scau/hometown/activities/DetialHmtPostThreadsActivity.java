@@ -44,13 +44,14 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
 
         requestQueue = Volley.newRequestQueue(DetialHmtPostThreadsActivity.this);
 
+
         hmtForumPostContent = (HmtForumPostContent) getIntent().getSerializableExtra("hmtForumPostContent");
+
         tid = (String) getIntent().getSerializableExtra("tid");
 
         String subject = hmtForumPostContent.getThread().getSubject();
         post_subject = (TextView) findViewById(R.id.post_subject);
         post_subject.setText(subject);
-
 
 
 

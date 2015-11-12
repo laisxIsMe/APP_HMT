@@ -96,7 +96,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         message = message.replaceAll("\\[/attach\\]", "【/attach】\n");
         message = message.replaceAll("\\[.*?\\]", "");
         final String name = postsEntity.getAuthor();
-
+        final String posthread=postsEntity.getSubject();
         String authorId = postsEntity.getAuthorid();
         String lastpost = postsEntity.getDateline();
 
@@ -116,6 +116,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                 Intent i =new Intent(context, SendPostThreadsActivity.class);
                 i.putExtra("author",name);
                 i.putExtra("tid",tid);
+                i.putExtra("posthread",posthread);
                 context.startActivity(i);
             }
         });
