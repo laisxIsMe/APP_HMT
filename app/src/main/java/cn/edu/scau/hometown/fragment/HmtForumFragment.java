@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,6 +60,7 @@ public class HmtForumFragment extends Fragment {
     private ImagesGuideToThreads imagesGuideToThreads;
     private String tid;
     private BGABanner banner;
+    private boolean isClick =false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +121,10 @@ public class HmtForumFragment extends Fragment {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid, 2);
+                    if(!isClick){
+                        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid, 2);
+                    }
+                    isClick=true;
                 }
             });
             com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(urls.get(i), imageView, options);
@@ -132,6 +135,7 @@ public class HmtForumFragment extends Fragment {
         banner.setVisibility(View.VISIBLE);
 
     }
+
 
 
     /**
@@ -146,8 +150,12 @@ public class HmtForumFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        tid = hmtForumPostList.getThreads().get(position).getTid();
-                        VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid, 2);
+                        if(!isClick){
+                            tid = hmtForumPostList.getThreads().get(position).getTid();
+                            VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid+"&page=1&limit=10", 2);
+                        }
+                        isClick=true;
+
                     }
                 })
         );
@@ -239,5 +247,9 @@ public class HmtForumFragment extends Fragment {
 
     }
 
-
+    @Override
+    public void onResume() {
+        isClick = false;
+        super.onResume();
+    }
 }

@@ -6,6 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent">
 
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/rootview2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
@@ -48,7 +53,12 @@
         </RelativeLayout>
     </RelativeLayout>
 
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/Refreshing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF5F5F5"
+        android:layout_below= "@id/title_bar">
     <android.support.v7.widget.RecyclerView
         android:layout_below="@id/title_bar"
         android:id="@+id/lv_detail_post_threads"
@@ -59,5 +69,6 @@
         android:layout_marginRight="8dp">
 
     </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
