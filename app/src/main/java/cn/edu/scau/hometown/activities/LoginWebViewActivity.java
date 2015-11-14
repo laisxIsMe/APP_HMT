@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -211,13 +212,13 @@ public class LoginWebViewActivity extends SwipeBackActivity {
     @Override
     public void onBackPressed() {
 
-        scrollToFinishActivity();
+        super.scrollToFinishActivity();
     }
 
     private void saveAccessToken(Context context,String string){
         SharedPreferences sp = context.getSharedPreferences("config", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("accessToken", string);
-        editor.commit();
+        editor.apply();
     }
 }

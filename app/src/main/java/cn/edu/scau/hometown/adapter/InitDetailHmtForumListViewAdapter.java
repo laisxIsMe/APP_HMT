@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.Environment;
 import android.os.Parcel;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -13,9 +14,11 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,6 +47,7 @@ import cn.edu.scau.hometown.bean.HmtThreadsAttachment;
 import cn.edu.scau.hometown.tools.DataUtil;
 import cn.edu.scau.hometown.tools.EmotionUtils;
 import cn.edu.scau.hometown.tools.HttpUtil;
+import cn.edu.scau.hometown.tools.ImageBuffer;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -153,7 +157,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         EditEmoj(spannableString, tv);
         EditUrl(spannableString);
         EditModified(spannableString);
-       // EditAttach(tv, spannableString);
+        EditAttach(tv, spannableString);
 
         return spannableString;
     }
@@ -291,7 +295,13 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                         java.lang.reflect.Type type = new TypeToken<HmtThreadsAttachment>() {
                         }.getType();
                         hmtThreadsAttachment = gson.fromJson(json, type);
-                        if (hmtThreadsAttachment.getStatus().equals("success")) {
+                         if(hmtThreadsAttachment.getStatus().equals("error")){
+                         //对无效的图片设置删除线
+                            spannableString.setSpan(new StrikethroughSpan(), startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                            tv.setText(spannableString);
+                            return;
+                        }
+                        if (hmtThreadsAttachment.getStatus().equals("success")&&hmtThreadsAttachment.getData().getIsimage().equals("1")) {
                             String attachImageUrl = hmtThreadsAttachment.getData().getAttachment();
                             getAttachContentTask(tv, spannableString, startAttach, endAttach, attachImageUrl);
                         }
@@ -314,13 +324,20 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
     private void getAttachContentTask(final TextView tv, final SpannableString spannableString, final int startAttach, final int endAttach, String attachImageUrl) {
        final String url = attachImageUrl;
+          //   判断SD卡缓存中是否已经存在该图片 （缩略图）
+        if(ImageBuffer.isExist("Scaled"+url)){
+            //存在则从内存或SD卡中获取
+            setImage(tv,url,spannableString,startAttach,endAttach);
+       }
+        else{
 
         ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
-                int imageWidth = response.getWidth();
-                int imageHeight = response.getHeight();
-                Bitmap bitmap = Bitmap.createScaledBitmap(response, (int) (1.5 * imageWidth), (int) (1.5 * imageHeight), true);
+
+                Bitmap bitmap =InitDetailHmtForumListViewAdapter.decodeSampledBitmapFromResource(response, tv.getWidth());
+
+
                 ImageSpan span = new ImageSpan(context, bitmap);
                 ClickableSpan clickableSpan=new ClickableSpan() {
                     @Override
@@ -330,12 +347,22 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                         context.startActivity(i);
                     }
                 };
+
+
+
                 spannableString.setSpan(span, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 spannableString.setSpan(clickableSpan, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 tv.setMovementMethod(LinkMovementMethod.getInstance());
                 tv.setText(spannableString);
 
-            }
+                //存入缓存和SD卡中
+                //存原图  第二个参数是一个key
+                ImageBuffer.saveBmpToSd(response, url);
+                //存缩放图
+                ImageBuffer.saveScaledBmpToSd(bitmap, url);
+
+
+       }
         }, 600, 900, Bitmap.Config.ARGB_4444,
                 new Response.ErrorListener() {
                     @Override
@@ -344,5 +371,71 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                     }
                 });
         mRequestQueue.add(imageRequest);
+        }
+    }
+
+
+    /*
+       created by ronghua  2015.10.31
+    * 根据textview的宽度与原始图片的宽度，计算出合适的缩放比例Ratio值
+    *
+    *
+    * */
+   public static float calculateInSampleSize(int imageWidth, int reqWidth) {
+
+       float Ratio = 1;
+       if (imageWidth > reqWidth) {
+           // 计算出实际宽高和目标宽高的比率
+
+           Ratio = (float) imageWidth / (float) reqWidth;
+
+       }
+
+       return Ratio;
+   }
+/*
+* created by ronghua  2015.10.31
+* 对原始图片进行变换，以适应手机屏幕
+* */
+    public static Bitmap decodeSampledBitmapFromResource(Bitmap res,int reqWidth) {
+
+
+        int imageWidth = res.getWidth();
+        int imageHeight =res.getHeight();
+
+
+       //计算缩放比例
+       float inSampleSize=calculateInSampleSize(imageWidth, reqWidth);
+
+
+        if(inSampleSize!=1) {
+            imageHeight= (int)((float)imageHeight/inSampleSize);
+            imageWidth=reqWidth;
+
+        }
+
+        return   Bitmap.createScaledBitmap(res, imageWidth, imageHeight, true);
+
+    }
+
+    private void setImage(TextView tv,final String url, SpannableString spannableString, int startAttach, int endAttach){
+       //获取缩略图
+        Bitmap  bitmap=ImageBuffer.getScaledBitmap(url);
+
+        ImageSpan span = new ImageSpan(context, bitmap);
+        ClickableSpan clickableSpan=new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Intent i =new Intent(context, LoginWebViewActivity.class);
+                i.putExtra("url",url);
+                context.startActivity(i);
+            }
+        };
+
+        spannableString.setSpan(span, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpan, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        tv.setText(spannableString);
+
     }
 }
