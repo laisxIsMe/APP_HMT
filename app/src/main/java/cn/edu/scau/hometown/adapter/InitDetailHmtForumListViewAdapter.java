@@ -14,6 +14,7 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
@@ -294,7 +295,13 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                         java.lang.reflect.Type type = new TypeToken<HmtThreadsAttachment>() {
                         }.getType();
                         hmtThreadsAttachment = gson.fromJson(json, type);
-                        if (hmtThreadsAttachment.getStatus().equals("success")) {
+                         if(hmtThreadsAttachment.getStatus().equals("error")){
+                         //对无效的图片设置删除线
+                            spannableString.setSpan(new StrikethroughSpan(), startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                            tv.setText(spannableString);
+                            return;
+                        }
+                        if (hmtThreadsAttachment.getStatus().equals("success")&&hmtThreadsAttachment.getData().getIsimage().equals("1")) {
                             String attachImageUrl = hmtThreadsAttachment.getData().getAttachment();
                             getAttachContentTask(tv, spannableString, startAttach, endAttach, attachImageUrl);
                         }
