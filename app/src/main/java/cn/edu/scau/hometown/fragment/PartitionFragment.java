@@ -1,21 +1,33 @@
 package cn.edu.scau.hometown.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.view.DraweeView;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+
 import java.util.ArrayList;
+
 
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.activities.HmtPartitionActivity;
+import cn.edu.scau.hometown.activities.MainActivity;
 import cn.edu.scau.hometown.activities.PublishPostActivity;
 import cn.edu.scau.hometown.listener.RecyclerItemClickListener;
 import fab.FloatingActionButton;
@@ -28,10 +40,15 @@ public class PartitionFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private ArrayList<Integer> icon;
     private ArrayList<String> iconName;
+    private Uri uri;
+    private int imageWidth, imageHeight;
+    private ImageRequest request;
+    private PipelineDraweeController controller;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initData();
     }
 
     @Nullable
@@ -40,7 +57,7 @@ public class PartitionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_partition, null);
         rcv_partition = (RecyclerView) view.findViewById(R.id.rcv_partition);
         rcv_partition.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        initData();
+
         rcv_partition.setAdapter(new PartitionAdapter());
         rcv_partition.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -95,6 +112,8 @@ public class PartitionFragment extends Fragment {
         icon.add(R.drawable.partition_recruit);
 
 
+
+
         iconName = new ArrayList<>();
         iconName.add("新生专区");
         iconName.add("职场交流");
@@ -128,13 +147,28 @@ public class PartitionFragment extends Fragment {
             MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
                     getActivity()).inflate(R.layout.partition_gridview_item, parent,
                     false));
+            CalculationView(holder);
             return holder;
         }
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-//            holder.partition_tv.setText(iconName.get(position));
-//            holder.partition_image.setImageDrawable(getResources().getDrawable(icon.get(position)));
+             holder.partition_tv.setText(iconName.get(position));
+//            缩放并显示图片图片
+            uri =Uri.parse("res://cn.edu.scau.hometown/" + icon.get(position));
+              request = ImageRequestBuilder.newBuilderWithSource(uri)
+                    .setResizeOptions(new ResizeOptions(imageWidth, imageHeight))
+                    .build();
+
+            controller = (PipelineDraweeController)Fresco.newDraweeControllerBuilder()
+                    .setOldController(holder.partition_image.getController())
+                    .setImageRequest(request)
+                    .build();
+             holder.partition_image.setController(controller);
+
+
+
+
         }
 
         @Override
@@ -145,13 +179,27 @@ public class PartitionFragment extends Fragment {
         class MyViewHolder extends RecyclerView.ViewHolder {
 
             TextView partition_tv;
-            ImageView partition_image;
+            SimpleDraweeView partition_image;
 
             public MyViewHolder(View view) {
                 super(view);
                 partition_tv = (TextView) view.findViewById(R.id.partition_text);
-                partition_image = (ImageView) view.findViewById(R.id.partition_image);
+                partition_image = (SimpleDraweeView) view.findViewById(R.id.partition_image);
             }
+        }
+
+        private void CalculationView(MyViewHolder holder){
+
+            int width =View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+
+            int height =View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+
+            holder.partition_image.measure(width,height);
+
+
+            imageWidth= holder.partition_image.getMeasuredHeight();
+            imageHeight=holder.partition_image.getMeasuredWidth();
+
         }
     }
 }
