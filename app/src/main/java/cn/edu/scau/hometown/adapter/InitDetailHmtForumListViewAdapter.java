@@ -15,12 +15,14 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -70,7 +72,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         this.context = context;
         this.mRequestQueue = Volley.newRequestQueue(this.context);
         this.tid = tid;
-        options=new DisplayImageOptions.Builder()
+        options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
@@ -96,7 +98,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         message = message.replaceAll("\\[/attach\\]", "【/attach】\n");
         message = message.replaceAll("\\[.*?\\]", "");
         final String name = postsEntity.getAuthor();
-        final String posthread=postsEntity.getSubject();
+        final String posthread = postsEntity.getSubject();
         String authorId = postsEntity.getAuthorid();
         String lastpost = postsEntity.getDateline();
 
@@ -110,19 +112,19 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
         holder.tv_content_of_detial_forum_threads.setText(EditThreadsContent(holder.tv_content_of_detial_forum_threads, "\t\t" + message));
         holder.tv_huitie_author_name.setText(name);
-        holder.tv_item_action_comment.setOnClickListener(new View.OnClickListener(){
+        holder.tv_item_action_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =new Intent(context, SendPostThreadsActivity.class);
-                i.putExtra("author",name);
-                i.putExtra("tid",tid);
-                i.putExtra("posthread",posthread);
+                Intent i = new Intent(context, SendPostThreadsActivity.class);
+                i.putExtra("author", name);
+                i.putExtra("tid", tid);
+                i.putExtra("posthread", posthread);
                 context.startActivity(i);
             }
         });
 
-    //    ImageLoader.getInstance().displayImage(HttpUtil.GET_USER_ICON_BY_USER_ID + authorId, holder.cig_huitie_author_icon, options);
-        HttpUtil.setUserIconTask(mRequestQueue,HttpUtil.GET_USER_ICON_BY_USER_ID + authorId, holder.cig_huitie_author_icon);
+        //    ImageLoader.getInstance().displayImage(HttpUtil.GET_USER_ICON_BY_USER_ID + authorId, holder.cig_huitie_author_icon, options);
+        HttpUtil.setUserIconTask(mRequestQueue, HttpUtil.GET_USER_ICON_BY_USER_ID + authorId, holder.cig_huitie_author_icon);
     }
 
     @Override
@@ -146,7 +148,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
             tv_huitie_author_name = (TextView) itemView.findViewById(R.id.tv_huitie_author_name);
             cig_huitie_author_icon = (CircleImageView) itemView.findViewById(R.id.cig_huitie_author_icon);
             tv_time_of_detail_forum_threads = (TextView) itemView.findViewById(R.id.tv_time_of_detail_forum_threads);
-            tv_item_action_comment=(TextView)itemView.findViewById(R.id.item_action_comment);
+            tv_item_action_comment = (TextView) itemView.findViewById(R.id.item_action_comment);
         }
     }
 
@@ -172,12 +174,12 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         Pattern patternUrl = Pattern.compile(regexUrl);
         Matcher matcherUrl = patternUrl.matcher(spannableString);
         while (matcherUrl.find()) {
-           final String url = matcherUrl.group();
+            final String url = matcherUrl.group();
             final int start = matcherUrl.start();
             int end = start + url.length();
             URLSpan urlSpan = new URLSpan(url);
 
-           spannableString.setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 
@@ -295,7 +297,12 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                         java.lang.reflect.Type type = new TypeToken<HmtThreadsAttachment>() {
                         }.getType();
                         hmtThreadsAttachment = gson.fromJson(json, type);
-                        if (hmtThreadsAttachment.getStatus().equals("success")) {
+                        if(hmtThreadsAttachment.getStatus().equals("error")){
+                            spannableString.setSpan(new StrikethroughSpan(), startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                            tv.setText(spannableString);
+                            return;
+                        }
+                        if (hmtThreadsAttachment.getStatus().equals("success")&&hmtThreadsAttachment.getData().getIsimage().equals("1")) {
                             String attachImageUrl = hmtThreadsAttachment.getData().getAttachment();
                             getAttachContentTask(tv, spannableString, startAttach, endAttach, attachImageUrl);
                         }
@@ -317,54 +324,52 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
 
     private void getAttachContentTask(final TextView tv, final SpannableString spannableString, final int startAttach, final int endAttach, String attachImageUrl) {
-       final String url = attachImageUrl;
-          //   判断SD卡缓存中是否已经存在该图片 （缩略图）
-        if(ImageBuffer.isExist("Scaled"+url)){
+        final String url = attachImageUrl;
+        //   判断SD卡缓存中是否已经存在该图片 （缩略图）
+        if (ImageBuffer.isExist("Scaled" + url)) {
             //存在则从内存或SD卡中获取
-            setImage(tv,url,spannableString,startAttach,endAttach);
-       }
-        else{
+            setImage(tv, url, spannableString, startAttach, endAttach);
+        } else {
 
-        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
+            ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap response) {
 
-                Bitmap bitmap =InitDetailHmtForumListViewAdapter.decodeSampledBitmapFromResource(response, tv.getWidth());
-
-
-                ImageSpan span = new ImageSpan(context, bitmap);
-                ClickableSpan clickableSpan=new ClickableSpan() {
-                    @Override
-                    public void onClick(View widget) {
-                        Intent i =new Intent(context, LoginWebViewActivity.class);
-                        i.putExtra("url",url);
-                        context.startActivity(i);
-                    }
-                };
+                    Bitmap bitmap = InitDetailHmtForumListViewAdapter.decodeSampledBitmapFromResource(response, tv.getWidth());
 
 
-
-                spannableString.setSpan(span, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                spannableString.setSpan(clickableSpan, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                tv.setMovementMethod(LinkMovementMethod.getInstance());
-                tv.setText(spannableString);
-
-                //存入缓存和SD卡中
-                //存原图  第二个参数是一个key
-                ImageBuffer.saveBmpToSd(response, url);
-                //存缩放图
-                ImageBuffer.saveScaledBmpToSd(bitmap, url);
+                    ImageSpan span = new ImageSpan(context, bitmap);
+                    ClickableSpan clickableSpan = new ClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            Intent i = new Intent(context, LoginWebViewActivity.class);
+                            i.putExtra("url", url);
+                            context.startActivity(i);
+                        }
+                    };
 
 
-       }
-        }, 600, 900, Bitmap.Config.ARGB_4444,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                    spannableString.setSpan(span, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    spannableString.setSpan(clickableSpan, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(spannableString);
 
-                    }
-                });
-        mRequestQueue.add(imageRequest);
+                    //存入缓存和SD卡中
+                    //存原图  第二个参数是一个key
+                    ImageBuffer.saveBmpToSd(response, url);
+                    //存缩放图
+                    ImageBuffer.saveScaledBmpToSd(bitmap, url);
+
+
+                }
+            }, 600, 900, Bitmap.Config.ARGB_4444,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
+            mRequestQueue.add(imageRequest);
         }
     }
 
@@ -375,53 +380,54 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
     *
     *
     * */
-   public static float calculateInSampleSize(int imageWidth, int reqWidth) {
+    public static float calculateInSampleSize(int imageWidth, int reqWidth) {
 
-       float Ratio = 1;
-       if (imageWidth > reqWidth) {
-           // 计算出实际宽高和目标宽高的比率
+        float Ratio = 1;
+        if (imageWidth > reqWidth) {
+            // 计算出实际宽高和目标宽高的比率
 
-           Ratio = (float) imageWidth / (float) reqWidth;
-
-       }
-
-       return Ratio;
-   }
-/*
-* created by ronghua  2015.10.31
-* 对原始图片进行变换，以适应手机屏幕
-* */
-    public static Bitmap decodeSampledBitmapFromResource(Bitmap res,int reqWidth) {
-
-
-        int imageWidth = res.getWidth();
-        int imageHeight =res.getHeight();
-
-
-       //计算缩放比例
-       float inSampleSize=calculateInSampleSize(imageWidth, reqWidth);
-
-
-        if(inSampleSize!=1) {
-            imageHeight= (int)((float)imageHeight/inSampleSize);
-            imageWidth=reqWidth;
+            Ratio = (float) imageWidth / (float) reqWidth;
 
         }
 
-        return   Bitmap.createScaledBitmap(res, imageWidth, imageHeight, true);
+        return Ratio;
+    }
+
+    /*
+    * created by ronghua  2015.10.31
+    * 对原始图片进行变换，以适应手机屏幕
+    * */
+    public static Bitmap decodeSampledBitmapFromResource(Bitmap res, int reqWidth) {
+
+
+        int imageWidth = res.getWidth();
+        int imageHeight = res.getHeight();
+
+
+        //计算缩放比例
+        float inSampleSize = calculateInSampleSize(imageWidth, reqWidth);
+
+
+        if (inSampleSize != 1) {
+            imageHeight = (int) ((float) imageHeight / inSampleSize);
+            imageWidth = reqWidth;
+
+        }
+
+        return Bitmap.createScaledBitmap(res, imageWidth, imageHeight, true);
 
     }
 
-    private void setImage(TextView tv,final String url, SpannableString spannableString, int startAttach, int endAttach){
-       //获取缩略图
-        Bitmap  bitmap=ImageBuffer.getScaledBitmap(url);
+    private void setImage(TextView tv, final String url, SpannableString spannableString, int startAttach, int endAttach) {
+        //获取缩略图
+        Bitmap bitmap = ImageBuffer.getScaledBitmap(url);
 
         ImageSpan span = new ImageSpan(context, bitmap);
-        ClickableSpan clickableSpan=new ClickableSpan() {
+        ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                Intent i =new Intent(context, LoginWebViewActivity.class);
-                i.putExtra("url",url);
+                Intent i = new Intent(context, LoginWebViewActivity.class);
+                i.putExtra("url", url);
                 context.startActivity(i);
             }
         };

@@ -171,7 +171,7 @@ public class SendPostThreadsActivity extends AppCompatActivity {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("id","iltc_open:post");
                 map.put("access_token", getAccessToken());
-                map.put("message",et_content.getText().toString());
+                map.put("message", et_content.getText().toString());
                 map.put("tid", "857127");
 
                 return map;
