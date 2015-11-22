@@ -125,7 +125,11 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         });
 
         //    ImageLoader.getInstance().displayImage(HttpUtil.GET_USER_ICON_BY_USER_ID + authorId, holder.cig_huitie_author_icon, options);
+        if(!name.equals("匿名"))
         HttpUtil.setUserIconTask(mRequestQueue, HttpUtil.GET_USER_ICON_BY_USER_ID + authorId, holder.cig_huitie_author_icon);
+        else
+            holder.cig_huitie_author_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.default_user_image));
+
     }
 
     @Override
