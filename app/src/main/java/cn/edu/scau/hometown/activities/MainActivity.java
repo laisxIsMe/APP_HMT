@@ -15,7 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
-
+import android.view.View;
+import android.widget.ImageView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -25,6 +26,7 @@ import java.util.List;
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.fragment.FocusFragment;
 import cn.edu.scau.hometown.fragment.HmtForumFragment;
+import cn.edu.scau.hometown.fragment.SearchDialog;
 import cn.edu.scau.hometown.fragment.PartitionFragment;
 import cn.edu.scau.hometown.fragment.SecondaryMarketFragment;
 
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     //判断在不同的Fragment中显示不同的snackBar背景颜色
     private String snackBarBackGroupColor = "Tab_green";
     private Toolbar toolbar;
+    private ImageView iv_search;
     //抽屉式布局
     private DrawerLayout mDrawerLayout;
     private TabLayout mTabLayout;
@@ -69,6 +72,15 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("华农人的红满堂");
         toolbar.setBackgroundColor(getResources().getColor(R.color.tab_green));
         setSupportActionBar(toolbar);
+
+        iv_search=(ImageView)findViewById(R.id.iv_search);
+        iv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new SearchDialog(MainActivity.this,snackBarBackGroupColor);
+            }
+        });
 
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
@@ -155,8 +167,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-
-
             }
 
             @Override
@@ -216,6 +226,9 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
+
+
 }
 class FragAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments;

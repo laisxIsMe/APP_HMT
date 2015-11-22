@@ -66,7 +66,6 @@ public class HmtPartitionActivity extends AppCompatActivity {
                         .getDisplayMetrics()));
         VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_FID + getFidByPartitionName(title) + "&page=" + nextPage + "&limit=30", 1);
 
-
     }
 
     private void initToolBar() {
