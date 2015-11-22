@@ -7,16 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
-import com.facebook.drawee.view.DraweeView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
@@ -24,10 +21,8 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.ArrayList;
 
-
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.activities.HmtPartitionActivity;
-import cn.edu.scau.hometown.activities.MainActivity;
 import cn.edu.scau.hometown.activities.PublishPostActivity;
 import cn.edu.scau.hometown.listener.RecyclerItemClickListener;
 import fab.FloatingActionButton;

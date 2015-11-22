@@ -68,6 +68,8 @@
         <activity android:name=".activities.PublishPostActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity android:name=".activities.ResultOfSearchActivity"
+            android:theme="@style/AppTheme"/>
 
     </application>
 
