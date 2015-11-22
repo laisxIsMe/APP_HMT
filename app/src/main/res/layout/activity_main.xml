@@ -30,7 +30,17 @@
                 android:fitsSystemWindows="true"
                 android:minHeight="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/search"
+                    android:clickable="true"
+                    android:layout_marginRight="20dip"
+                    android:layout_gravity="right"
+                    ></ImageView>
+            </android.support.v7.widget.Toolbar>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tl"
