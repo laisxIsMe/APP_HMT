@@ -1,6 +1,7 @@
 package cn.edu.scau.hometown.activities;
 
 import android.animation.ArgbEvaluator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -12,10 +13,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -26,7 +27,6 @@ import java.util.List;
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.fragment.FocusFragment;
 import cn.edu.scau.hometown.fragment.HmtForumFragment;
-import cn.edu.scau.hometown.fragment.SearchDialog;
 import cn.edu.scau.hometown.fragment.PartitionFragment;
 import cn.edu.scau.hometown.fragment.SecondaryMarketFragment;
 
@@ -73,23 +73,12 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(getResources().getColor(R.color.tab_green));
         setSupportActionBar(toolbar);
 
-        iv_search=(ImageView)findViewById(R.id.iv_search);
-        iv_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new SearchDialog(MainActivity.this,snackBarBackGroupColor);
-            }
-        });
-
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         final ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar, R.string.app_name, R.string.app_name);
         mDrawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
     }
-
 
 
     private void InitTabLayout() {
@@ -218,14 +207,33 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        final SearchView sv = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(MainActivity.this, ResultOfSearchActivity.class);
+                intent.putExtra("keyWord", query);
+                startActivity(intent);
+                sv.setQuery("", false);
+                sv.clearFocus();
+                sv.setIconified(true);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
+
 
 
 
