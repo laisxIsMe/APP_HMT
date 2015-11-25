@@ -96,6 +96,7 @@ private void initToolbar(){
                                          boolean isChecked) {
                 // TODO Auto-generated method stub
                 isLoading=isChecked;
+
             }
         });
 
@@ -107,8 +108,9 @@ private void initToolbar(){
 
     @Override
     protected void onDestroy() {
+        editor.putBoolean("isLoadingPicture",isLoading);
+        editor.commit();
          super.onDestroy();
-         editor.putBoolean("isLoadingPicture",isLoading);
-         editor.commit();
+
     }
 }
