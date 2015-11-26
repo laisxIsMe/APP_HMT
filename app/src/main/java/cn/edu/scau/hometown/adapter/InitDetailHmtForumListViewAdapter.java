@@ -41,8 +41,9 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.edu.scau.hometown.R;
+
 import cn.edu.scau.hometown.activities.LoginWebViewActivity;
+import cn.edu.scau.hometown.activities.PhotoViewActivity;
 import cn.edu.scau.hometown.activities.SendPostThreadsActivity;
 import cn.edu.scau.hometown.bean.HmtForumPostContent;
 import cn.edu.scau.hometown.bean.HmtThreadsAttachment;
@@ -51,7 +52,7 @@ import cn.edu.scau.hometown.tools.EmotionUtils;
 import cn.edu.scau.hometown.tools.HttpUtil;
 import cn.edu.scau.hometown.tools.ImageBuffer;
 import de.hdodenhof.circleimageview.CircleImageView;
-
+import cn.edu.scau.hometown.R;
 /**
  * Created by Administrator on 2015/9/2 0002.
  * 用于渲染论坛帖子回帖列表，填充帖子回帖列表视图的Adapter类
@@ -332,6 +333,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
     private void getAttachContentTask(final TextView tv, final SpannableString spannableString, final int startAttach, final int endAttach, String attachImageUrl) {
         final String url = attachImageUrl;
+        Log.i("aid---2>",url);
         //   判断SD卡缓存中是否已经存在该图片 （缩略图）
         if (ImageBuffer.isExist("Scaled" + url)) {
             //存在则从内存或SD卡中获取
@@ -341,7 +343,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
             ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
                 @Override
                 public void onResponse(Bitmap response) {
-
+                    Log.i("res--->",String.valueOf(response.getWidth()));
                     Bitmap bitmap = InitDetailHmtForumListViewAdapter.decodeSampledBitmapFromResource(response, tv.getWidth());
 
 
@@ -349,7 +351,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
                     ClickableSpan clickableSpan = new ClickableSpan() {
                         @Override
                         public void onClick(View widget) {
-                            Intent i = new Intent(context, LoginWebViewActivity.class);
+                            Intent i = new Intent(context, PhotoViewActivity.class);
                             i.putExtra("url", url);
                             context.startActivity(i);
                         }
@@ -409,7 +411,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
         int imageWidth = res.getWidth();
         int imageHeight = res.getHeight();
-
+Log.i("pic--->",String.valueOf(reqWidth)+"***"+String.valueOf(res.getWidth()));
 
         //计算缩放比例
         float inSampleSize = calculateInSampleSize(imageWidth, reqWidth);
@@ -420,7 +422,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
             imageWidth = reqWidth;
 
         }
-
+        Log.i("pic--->",String.valueOf(imageWidth));
         return Bitmap.createScaledBitmap(res, imageWidth, imageHeight, true);
 
     }
@@ -433,7 +435,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                Intent i = new Intent(context, LoginWebViewActivity.class);
+                Intent i = new Intent(context, PhotoViewActivity.class);
                 i.putExtra("url", url);
                 context.startActivity(i);
             }
@@ -445,4 +447,5 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         tv.setText(spannableString);
 
     }
+
 }
