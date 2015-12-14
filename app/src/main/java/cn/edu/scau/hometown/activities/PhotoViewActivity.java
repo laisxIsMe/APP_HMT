@@ -68,6 +68,7 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
     private AlertDialog alertDialog;
     private ViewGroup viewGroup;
     private ProgressDialog progressDialog;
+    private     Handler mhandler;
 
 
     @Override
@@ -79,7 +80,7 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
         initToolbar();
         url=(String)getIntent().getSerializableExtra("url");
         getImage();
-
+        mhandler=new Handler();
 
     }
 
@@ -122,6 +123,7 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
 
                             Message message = new Message();
                             message.obj=imageReference;
+                            message.arg1=1;
                             myHandler.sendMessage(message);
 
                         }
@@ -136,9 +138,12 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
 
     }
 
-    private static Handler myHandler = new Handler(){
+    private  Handler myHandler = new Handler(){
         @Override
         public void handleMessage(Message msg){
+            switch (msg.arg1){
+            case 1:
+            {
             super.handleMessage(msg);
             imageReference=(CloseableReference<CloseableStaticBitmap>)msg.obj;
             CloseableStaticBitmap image = imageReference.get();
@@ -148,6 +153,15 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
             progressView.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
             imageView.invalidate();
+            }
+            break;
+                case 2:{
+                    Toast.makeText(PhotoViewActivity.this, "成功保存图片至/hongmantang/红满堂",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+
         }
     };
 
@@ -174,46 +188,45 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
 
 
     private void SavePhoto(){
-        showDialog();
-        File picFileDir = new File(Environment.getExternalStorageDirectory().getPath()+File.separator+"hongmantang"+File.separator+"红满堂");
-       if(!picFileDir.exists()){
-             picFileDir.mkdir();
-           }
+      new Thread(new Runnable() {
+          @Override
+          public void run() {
+              File picFileDir = new File(Environment.getExternalStorageDirectory().getPath()+File.separator+"hongmantang"+File.separator+"红满堂");
+              if(!picFileDir.exists()){
+                  picFileDir.mkdir();
+              }
 
-        String photoName= ImageBuffer.convertUrlToFileName(url);
-        File file = new File(picFileDir +"/"+photoName);
-        try {
-            if(file.createNewFile()) {
+              String photoName= ImageBuffer.convertUrlToFileName(url);
+              File file = new File(picFileDir +"/"+photoName);
+              try {
+                  if(file.createNewFile()) {
 
-                OutputStream outStream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-                outStream.flush();
-                outStream.close();
+                      OutputStream outStream = new FileOutputStream(file);
+                      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+                      outStream.flush();
+                      outStream.close();
 
-            }
-        } catch (FileNotFoundException e) {
+                  }
+              } catch (FileNotFoundException e) {
 
-        } catch (IOException e) {
-            Log.w("test----->", e.toString());
-        }
+              } catch (IOException e) {
+                  Log.w("test----->", e.toString());
+              }
+              Message message=Message.obtain();
+              message.arg1=2;
+              myHandler.sendMessage(message);
 
-        Toast.makeText(PhotoViewActivity.this, "成功保存图片至/hongmantang/红满堂",
-                Toast.LENGTH_SHORT).show();
-
-    }
-
-    private void showDialog(){
-//       progressDialog= ProgressDialog.show(PhotoViewActivity.this, "保存", "正在保存,");
+          }
+      }).start();
 
 
-//        AlertDialog.Builder builder=new AlertDialog.Builder(PhotoViewActivity.this);
-//        View view=getLayoutInflater().
-//                inflate(R.layout.photoviewactivity_dialog_layout, null);
-//        builder.setView(view);
-//        alertDialog=builder.create();
-//        alertDialog.show();
+
 
     }
+
+
+
+
 }
 
 
