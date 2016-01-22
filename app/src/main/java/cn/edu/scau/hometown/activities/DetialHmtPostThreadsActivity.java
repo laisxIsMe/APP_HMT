@@ -57,6 +57,7 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
     private int mReplies;
     boolean mFlag=false;
     private int isBottom =1;
+    private String authorName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +73,11 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
 
-        hmtForumPostContent = (HmtForumPostContent) getIntent().getSerializableExtra("hmtForumPostContent");
-
         tid = (String) getIntent().getSerializableExtra("tid");
+        authorName= (String) getIntent().getSerializableExtra("author");
+        hmtForumPostContent = (HmtForumPostContent) getIntent().getSerializableExtra("hmtForumPostContent");
+        hmtForumPostContent.getPosts().get(0).setAuthor("匿名");
+
         mReplies = Integer.parseInt(hmtForumPostContent.getThread().getReplies());
 
         String subject = hmtForumPostContent.getThread().getSubject();

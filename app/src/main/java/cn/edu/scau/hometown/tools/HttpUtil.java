@@ -38,6 +38,10 @@ public class HttpUtil {
     public static final String GET_SECOND_MARKET_GOOD_BY_GID="http://192.168.253.73/hometown_market/hometownMarket/index.php/Home/Api/good/id/";
     public static final String GET_SECOND_MARKET_GOOD_BY_DIRECTORY_ID="http://192.168.253.73/hometown_market/hometownMarket/index.php/Home/Api/catalog/cate/";
     public static final String GET_SECOND_MARKET_GOOD_BY_KEY_WORD="http://192.168.253.73/hometown_market/hometownMarket/index.php/Home/Api/search/name/";
+
+     //获取压缩图
+    public static final String GET_POST_THREADS_ATTACHMENT_Scaled_BY_TID_AND_AID="http://192.168.253.73:8200/theone/HelloWorld?id=iltc_open:attachment&action=view&tid=";
+
     /**
      * @param url 發送請求的url
      * @return 服務器響應請求發送的字符串
