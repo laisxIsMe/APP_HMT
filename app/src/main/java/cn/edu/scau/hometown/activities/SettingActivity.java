@@ -13,7 +13,7 @@ import android.widget.Switch;
 import cn.edu.scau.hometown.R;
 /*
 *
-* create by ronghua 2015.10.29
+* create by hiai 2015.10.29
 *
 *
 *
@@ -36,15 +36,20 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        initSharedPreferences();
         initView();
+        initSetting();
         initToolbar();
         setListener();
-        initSharedPreferences();
+
 
     }
 
 
+private void initSetting(){
+    isLoading=isLoadingPicture.getBoolean("isLoadingPicture",true);
 
+}
 
 private void initToolbar(){
 
@@ -60,7 +65,7 @@ private void initToolbar(){
             finish();
         }
     });
-    swt_loadPicture.setChecked(true);
+    swt_loadPicture.setChecked(isLoading);
 }
 
     private void initView(){
@@ -108,8 +113,8 @@ private void initToolbar(){
 
     @Override
     protected void onDestroy() {
-        editor.putBoolean("isLoadingPicture",isLoading);
-        editor.commit();
+         editor.putBoolean("isLoadingPicture",isLoading);
+         editor.commit();
          super.onDestroy();
 
     }
