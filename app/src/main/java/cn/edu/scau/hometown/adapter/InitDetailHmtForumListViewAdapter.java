@@ -59,7 +59,7 @@ import cn.edu.scau.hometown.R;
 /**
  * Created by Administrator on 2015/9/2 0002.
  * 用于渲染论坛帖子回帖列表，填充帖子回帖列表视图的Adapter类
- * 该类会请求两次同样的json，待解决
+ *
  */
 public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<InitDetailHmtForumListViewAdapter.ViewHolder> {
 
@@ -329,7 +329,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
         final String url = HttpUtil.GET_POST_THREADS_ATTACHMENT_Scaled_BY_TID_AND_AID + tid + "&aid=" + aid + "&width="+getImageViewWidth(tv);
         Log.i("url--->", url);
-        //   判断SD卡缓存中是否已经存在该图片 （缩略图）
+        //   判断SD卡缓存中是否已经存在该图片 （压缩图）
         if (ImageBuffer.isExist( url)) {
             Log.i("Image--->","isExist");
             //存在则从内存或SD卡中获取
@@ -388,19 +388,14 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         DisplayMetrics displayMetrics = textView.getContext().getResources()
                 .getDisplayMetrics();
 
-        ViewGroup.LayoutParams lp = textView.getLayoutParams();
 
-        int width = textView.getWidth();// 获取imageview的实际宽度
+       int width = textView.getMeasuredWidth();
         Log.i("TextViewSize1",String.valueOf(width));
-        if (width <= 0)
-        {
-            width = lp.width;// 获取imageview在layout中声明的宽度
-            Log.i("TextViewSize2",String.valueOf(width));
-        }
+
         if (width <= 0)
         {
             width = displayMetrics.widthPixels;
-            Log.i("TextViewSize3",String.valueOf(width));
+            Log.i("TextViewSize2",String.valueOf(width));
         }
        return width;
     }
