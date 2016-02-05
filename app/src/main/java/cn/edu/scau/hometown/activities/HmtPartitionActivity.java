@@ -164,7 +164,7 @@ public class HmtPartitionActivity extends AppCompatActivity {
                     }
                 }
         );
-
+        mJsonRequest.setTag(true);
         mRequestQueue.add(mJsonRequest);
     }
 
@@ -261,5 +261,11 @@ public class HmtPartitionActivity extends AppCompatActivity {
             }
         });
         mSwipeRefreshWidget.setRefreshing(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRequestQueue.cancelAll(true);
     }
 }

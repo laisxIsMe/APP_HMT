@@ -1,21 +1,17 @@
 package cn.edu.scau.hometown.activities;
 
-import android.annotation.SuppressLint;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -23,9 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.facebook.cache.disk.DiskCacheConfig;
-import com.facebook.common.disk.DiskTrimmable;
-import com.facebook.common.disk.DiskTrimmableRegistry;
+
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.BaseDataSubscriber;
 import com.facebook.datasource.DataSource;
@@ -37,6 +31,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.image.CloseableStaticBitmap;
 import com.facebook.imagepipeline.request.ImageRequest;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,6 +41,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.concurrent.Executors;
 
+import cn.edu.scau.hometown.MyApplication;
 import cn.edu.scau.hometown.R;
 import cn.edu.scau.hometown.tools.ImageBuffer;
 import cn.edu.scau.hometown.view.CircularProgress;
@@ -58,17 +54,17 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class PhotoViewActivity extends AppCompatActivity implements OnClickListener{
 
     private String url;
-    private static ImageView imageView;
-    private static PhotoViewAttacher mAttacher;
-    private static CircularProgress progressView;
+    private  ImageView imageView;
+    private  PhotoViewAttacher mAttacher;
+    private  CircularProgress progressView;
     private Toolbar toolbar;
-    private static  CloseableReference<CloseableStaticBitmap> imageReference;
+    private   CloseableReference<CloseableStaticBitmap> imageReference;
     private Button savePhoto;
     private static Bitmap bitmap;
     private AlertDialog alertDialog;
     private ViewGroup viewGroup;
     private ProgressDialog progressDialog;
-    private     Handler mhandler;
+    private  Handler mhandler;
 
 
     @Override
@@ -146,13 +142,18 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
             {
             super.handleMessage(msg);
             imageReference=(CloseableReference<CloseableStaticBitmap>)msg.obj;
+
             CloseableStaticBitmap image = imageReference.get();
             bitmap=image.getUnderlyingBitmap();
+
             imageView.setImageBitmap(bitmap);
+
             mAttacher = new PhotoViewAttacher(imageView);
             progressView.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
             imageView.invalidate();
+
+
             }
             break;
                 case 2:{
@@ -169,6 +170,8 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        RefWatcher refWatcher= MyApplication.getRefWatcher(this);
+        refWatcher.watch(imageReference);
         if(imageReference!=null)  {
             imageReference.close();
         }
@@ -187,44 +190,43 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
     }
 
 
-    private void SavePhoto(){
-      new Thread(new Runnable() {
-          @Override
-          public void run() {
-              File picFileDir = new File(Environment.getExternalStorageDirectory().getPath()+File.separator+"hongmantang"+File.separator+"红满堂");
-              if(!picFileDir.exists()){
-                  picFileDir.mkdir();
-              }
+    private void SavePhoto() {
+        if (bitmap != null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    File picFileDir = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "hongmantang" + File.separator + "红满堂");
+                    if (!picFileDir.exists()) {
+                        picFileDir.mkdir();
+                    }
 
-              String photoName= ImageBuffer.convertUrlToFileName(url);
-              File file = new File(picFileDir +"/"+photoName);
-              try {
-                  if(file.createNewFile()) {
+                    String photoName = ImageBuffer.convertUrlToFileName(url);
+                    File file = new File(picFileDir + "/" + photoName);
+                    try {
+                        if (file.createNewFile()) {
 
-                      OutputStream outStream = new FileOutputStream(file);
-                      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-                      outStream.flush();
-                      outStream.close();
+                            OutputStream outStream = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+                            outStream.flush();
+                            outStream.close();
 
-                  }
-              } catch (FileNotFoundException e) {
+                        }
+                    } catch (FileNotFoundException e) {
 
-              } catch (IOException e) {
-                  Log.w("test----->", e.toString());
-              }
-              Message message=Message.obtain();
-              message.arg1=2;
-              myHandler.sendMessage(message);
+                    } catch (IOException e) {
+                        Log.w("test----->", e.toString());
+                    }
+                    Message message = Message.obtain();
+                    message.arg1 = 2;
+                    myHandler.sendMessage(message);
 
-          }
-      }).start();
+                }
+            }).start();
 
 
-
+        }
 
     }
-
-
 
 
 }

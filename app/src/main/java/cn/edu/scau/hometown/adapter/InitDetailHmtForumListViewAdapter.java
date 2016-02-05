@@ -75,6 +75,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
 
 
+
     public InitDetailHmtForumListViewAdapter(Context context, HmtForumPostContent hmtForumPostContent, String tid) {
         super();
 
@@ -322,7 +323,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
         spannableString.setSpan(span, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(clickableSpan, startAttach, endAttach, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
-        tv.setText(spannableString);
+       tv.setText(spannableString);
 
     }
     private void getAndSetImage(final TextView tv, final SpannableString spannableString, final int startAttach, final int endAttach, String aid) {
@@ -371,6 +372,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
 
                     }
                 });
+            imageRequest.setTag(true);
         mRequestQueue.add(imageRequest);
     }
     }
@@ -400,6 +402,10 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
        return width;
     }
 
+  public void destroyAdapter(){
+      mRequestQueue.stop();
+      mRequestQueue.cancelAll(true);
 
+  }
 
 }

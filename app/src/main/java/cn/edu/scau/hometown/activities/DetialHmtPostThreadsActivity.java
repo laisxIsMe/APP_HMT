@@ -191,7 +191,7 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
                     }
                 }
         );
-
+      mJsonRequest.setTag(true);
         requestQueue.add(mJsonRequest);
     }
 
@@ -234,6 +234,13 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
                 break;
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adapter.destroyAdapter();
+        requestQueue.cancelAll(true);
     }
 
     /**
