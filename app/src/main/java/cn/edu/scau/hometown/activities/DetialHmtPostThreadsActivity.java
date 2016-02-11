@@ -239,7 +239,8 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        adapter.destroyAdapter();
+        adapter.clean();
+        requestQueue.stop();
         requestQueue.cancelAll(true);
     }
 

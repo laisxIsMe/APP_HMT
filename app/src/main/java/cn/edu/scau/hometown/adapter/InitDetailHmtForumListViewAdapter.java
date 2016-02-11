@@ -336,7 +336,7 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
             //存在则从内存或SD卡中获取
             setImage(tv, url, spannableString, startAttach, endAttach);
         } else {
-            Log.i("Image--->","notExist");
+            Log.i("Image--->", "notExist");
         ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
@@ -385,24 +385,18 @@ public class InitDetailHmtForumListViewAdapter extends RecyclerView.Adapter<Init
      */
     public static int getImageViewWidth(TextView textView)
     {
-
-
         DisplayMetrics displayMetrics = textView.getContext().getResources()
                 .getDisplayMetrics();
-
-
-       int width = textView.getMeasuredWidth();
-        Log.i("TextViewSize1",String.valueOf(width));
+        int width = textView.getMeasuredWidth();
 
         if (width <= 0)
         {
             width = displayMetrics.widthPixels;
-            Log.i("TextViewSize2",String.valueOf(width));
         }
        return width;
     }
 
-  public void destroyAdapter(){
+  public void clean(){
       mRequestQueue.stop();
       mRequestQueue.cancelAll(true);
 

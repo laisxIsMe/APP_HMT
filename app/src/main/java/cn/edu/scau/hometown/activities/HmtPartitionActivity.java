@@ -266,6 +266,8 @@ public class HmtPartitionActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        initHmtForumListViewAdapter.clean();
+        mRequestQueue.stop();
         mRequestQueue.cancelAll(true);
     }
 }

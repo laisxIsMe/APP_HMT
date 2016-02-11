@@ -65,12 +65,13 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
     private ViewGroup viewGroup;
     private ProgressDialog progressDialog;
     private  Handler mhandler;
+    private  CloseableStaticBitmap image;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fresco.initialize(this);
+        Fresco.initialize(getApplicationContext());
         setContentView(R.layout.activity_photo_view);
         initView();
         initToolbar();
@@ -143,7 +144,7 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
             super.handleMessage(msg);
             imageReference=(CloseableReference<CloseableStaticBitmap>)msg.obj;
 
-            CloseableStaticBitmap image = imageReference.get();
+            image = imageReference.get();
             bitmap=image.getUnderlyingBitmap();
 
             imageView.setImageBitmap(bitmap);
@@ -167,15 +168,7 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
     };
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        RefWatcher refWatcher= MyApplication.getRefWatcher(this);
-        refWatcher.watch(imageReference);
-        if(imageReference!=null)  {
-            imageReference.close();
-        }
-    }
+
 
     @Override
     public void onClick(View v) {
@@ -227,7 +220,18 @@ public class PhotoViewActivity extends AppCompatActivity implements OnClickListe
         }
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher= MyApplication.getRefWatcher(this);
+        refWatcher.watch(imageReference);
+        if(imageReference!=null)  {
+            imageReference.close();
+        }
+        image.close();
 
+
+    }
 
 }
 

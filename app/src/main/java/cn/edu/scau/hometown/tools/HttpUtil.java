@@ -140,6 +140,7 @@ public class HttpUtil {
 
                     }
                 });
+        imageRequest.setTag(true);
         requestQueue.add(imageRequest);
 
 

@@ -43,6 +43,6 @@ public static RefWatcher getRefWatcher(Context context){
         ImageLoaderConfiguration configuration=ImageLoaderConfiguration.createDefault(this);
         ImageLoader.getInstance().init(configuration);
         setHmtUserBasedInfo((HmtUserBasedInfo) DataUtil.getObject("登陆数据", this));
-      refWatcher = LeakCanary.install(this);
+         refWatcher = LeakCanary.install(this);
     }
 }
