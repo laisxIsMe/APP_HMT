@@ -123,21 +123,20 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                {
+
                     super.onScrolled(recyclerView, dx, dy);
 
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                     if (lastVisibleItem + 4 >= adapter.getItemCount() - 1 && mFlag == false) {
                         mFlag = true;
                         VolleyRequestString(HttpUtil.GET_HMT_FORUM_POSTS_CONTENT_BY_TID + tid + "&page=" + nextPage + "&limit=10");
-                        adapter.notifyDataSetChanged();
+
                     }
                     if (lastVisibleItem + 4 < adapter.getItemCount() - 1) {
                         mFlag = false;
                     }
 
-                }
+
             }
         });
     }
@@ -192,7 +191,7 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
                     }
                 }
         );
-
+      mJsonRequest.setTag(true);
         requestQueue.add(mJsonRequest);
     }
 
@@ -235,6 +234,14 @@ public class DetialHmtPostThreadsActivity extends SwipeBackActivity implements V
                 break;
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adapter.clean();
+        requestQueue.stop();
+        requestQueue.cancelAll(true);
     }
 
     /**

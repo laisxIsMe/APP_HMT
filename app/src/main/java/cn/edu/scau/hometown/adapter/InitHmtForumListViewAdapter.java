@@ -137,5 +137,10 @@ public class InitHmtForumListViewAdapter extends RecyclerView.Adapter<InitHmtFor
             civ_icon_of_forum_threads = (CircleImageView) itemView.findViewById(R.id.tv_icon_of_forum_threads);
         }
     }
+    public void clean(){
+        requestQueue.stop();
+        requestQueue.cancelAll(true);
+
+    }
 
 }

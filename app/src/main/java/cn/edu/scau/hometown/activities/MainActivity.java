@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fresco.initialize(this);
+        Fresco.initialize(getApplicationContext());
         setContentView(R.layout.activity_main);
         ll_main = (CoordinatorLayout) findViewById(R.id.main);
         fragments=new ArrayList<Fragment>();
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.getMenuInflater().inflate(R.menu.menu_main, menu);
         final SearchView sv = (SearchView) menu.findItem(R.id.action_search).getActionView();
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

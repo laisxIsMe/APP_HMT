@@ -288,6 +288,7 @@ public class SearchCoursesActivity extends SwipeBackActivity implements SearchMe
                         lo_swiper.setRefreshing(false);
                     }
                 });
+        mJsonRequest.setTag(true);
 
         mRequestQueue.add(mJsonRequest);
     }
@@ -316,5 +317,12 @@ public class SearchCoursesActivity extends SwipeBackActivity implements SearchMe
 
     private void recommend_bt_course_language(){
         Toast.makeText(this,"A",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRequestQueue.stop();
+        mRequestQueue.cancelAll(true);
     }
 }
