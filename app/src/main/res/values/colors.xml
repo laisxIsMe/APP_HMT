@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <color name="white">#ffffff</color>
     <color name="tab_pink">#ff80ab</color>
     <color name="tab_purple">#9575cd</color>
@@ -9,14 +8,22 @@
     <color name="tab_brown">#795548</color>
     <color name="tv_Black">#000000</color>
     <color name="tv_Red">#CC0000</color>
-    <color name="bt_red_bright">#ff3a3a</color>
     <color name="material_blue_500">#5677fc</color>
     <color name="fab_green_n">#009688</color>
     <color name="fab_green_p">#99009688</color>
+    <color name="fab_purple_n">#9575cd</color>
+    <color name="fab_purple_p">#999575cd</color>
     <color name="grey">#c0c0c0</color>
 
     <color name="title_green_n">#9910B5DE</color>
     <color name="title_green_p">#99009688</color>
     <color name="ll_pressed">#EBEBEB</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="CircularProgress_red">#FFC93437</color>
+    <color name="CircularProgress_blue">#FF375BF1</color>
+    <color name="CircularProgress_yellow">#FFF7D23E</color>
+    <color name="CircularProgress_green">#FF34A350</color>
 
 </resources>
